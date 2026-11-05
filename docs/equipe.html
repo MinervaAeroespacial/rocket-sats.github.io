@@ -3,23 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Equipe — Minerva</title>
-<meta name="description" content="Minerva — pesquisa aplicada, projetos, sistemas e publicações.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%232563eb'/><text x='16' y='22' font-family='Arial' font-weight='700' font-size='16' fill='white' text-anchor='middle'>M</text></svg>">
+<title>Equipe — Minerva Aeroespacial</title>
+<meta name="description" content="Membros da Minerva Rockets e da Minerva Sats por ciclo e por subequipe.">
+<meta property="og:title" content="Equipe — Minerva Aeroespacial">
+<meta property="og:description" content="Membros da Minerva Rockets e da Minerva Sats por ciclo e por subequipe.">
+<meta property="og:image" content="img/fotos/equipe-2026.webp">
+<meta name="theme-color" content="#07080c">
+<link rel="icon" href="img/logos/minerva-aeroespacial.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="equipe">
-<div id="header"></div>
+<header id="header"></header>
 <main>
-<section class="sec gray"><div class="container">
-  <div class="page-title"><h1>Nossa Equipe</h1><p>Conheça os pesquisadores, desenvolvedores e colaboradores que fazem nosso trabalho acontecer</p></div>
-  <div class="grid" id="team"></div>
-</div></section>
+
+<section class="hero short">
+  <div class="bg" style="background-image:url('img/fotos/equipe-campo-2026.webp')"></div>
+  <div class="container">
+    <span class="eyebrow">Equipe</span>
+    <h1>As pessoas<br>por trás da missão</h1>
+    <p class="lead">Escolha um ciclo para ver quem fez parte da equipe naquele semestre.</p>
+  </div>
+</section>
+<section class="sec">
+  <div class="container">
+    <div class="filter-row"><div><label>Ciclo</label></div><div class="chips" id="ciclos"></div></div>
+    <div class="filter-row"><div class="chips" id="times"></div></div>
+    <p class="mut" id="ciclo-desc" style="margin-bottom:34px"></p>
+    <div id="team"></div>
+    <section class="dept"><div class="dept-h"><span class="bar g"></span><h3>Professores orientadores</h3></div>
+      <div class="people-grid" id="orientadores"></div></section>
+    <div class="notice">Fotos dos membros entram com autorização de cada pessoa. Para mudar um nome, cargo ou foto, edite o arquivo <code>dados.js</code>.</div>
+  </div>
+</section>
+
 </main>
-<div id="footer"></div>
-<script src="posts.js"></script>
+<footer id="footer"></footer>
+<script src="dados.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

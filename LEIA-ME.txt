@@ -1,0 +1,34 @@
+SITE MINERVA AEROESPACIAL — COMO PUBLICAR
+=========================================
+
+1. No GitHub, abra o repositório MinervaAeroespacial/rocket-sats.github.io.
+2. Apague a pasta "docs" antiga (ou substitua os arquivos dela).
+3. Clique em Add file > Upload files e arraste a pasta "docs" deste .zip.
+   O GitHub Pages já está configurado para publicar a partir de /docs.
+4. Faça o commit. Em 1 a 3 minutos o site novo está no ar.
+
+ONDE EDITAR
+- dados.js: membros por ciclo, subequipes, projetos, conquistas,
+  parceiros e notícias. É o único arquivo que a equipe precisa mexer.
+- Textos fixos de cada página: no próprio .html (index, rockets, sats...).
+- Imagens: pasta img/ (logos, parceiros, fotos, hemera, subteams).
+
+NOVO CICLO (ex.: 2027.1)
+- Em CICLOS, acrescente { id: "2027-1", nome: "2027.1", desc: "..." } NO TOPO.
+- Em MEMBROS, crie a lista "2027-1" no mesmo formato do "2026-2".
+
+NOVO PARCEIRO
+- Salve o logo em img/parceiros/ e acrescente uma linha em PARCEIROS
+  com o nível (0 Instituições, 1 Patrocinadores, 2 Laboratórios, 3 Apoio).
+
+TESTAR NO COMPUTADOR
+- Dentro de docs/, rode: python -m http.server 8000
+- Abra http://localhost:8000
+
+CAMPANHA DE DOAÇÃO E REDES SOCIAIS
+- Em dados.js > SITE.doacao: link da Vakinha, chave Pix e valores
+  (arrecadado, meta, apoiadores, data). Os valores NÃO atualizam
+  sozinhos: troque quando quiser mostrar o número novo.
+- SITE.redes: links e número de seguidores de cada rede.
+- VIDEOS: para mostrar um vídeo novo do YouTube, copie o código depois
+  de "watch?v=" e acrescente uma linha no topo da lista.

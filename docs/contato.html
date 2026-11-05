@@ -3,34 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contato — Minerva</title>
-<meta name="description" content="Minerva — pesquisa aplicada, projetos, sistemas e publicações.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%232563eb'/><text x='16' y='22' font-family='Arial' font-weight='700' font-size='16' fill='white' text-anchor='middle'>M</text></svg>">
+<title>Contato — Minerva Aeroespacial</title>
+<meta name="description" content="Fale com a Minerva Rockets e a Minerva Sats: patrocínio, imprensa e processo seletivo.">
+<meta property="og:title" content="Contato — Minerva Aeroespacial">
+<meta property="og:description" content="Fale com a Minerva Rockets e a Minerva Sats: patrocínio, imprensa e processo seletivo.">
+<meta property="og:image" content="img/fotos/equipe-2026.webp">
+<meta name="theme-color" content="#07080c">
+<link rel="icon" href="img/logos/minerva-aeroespacial.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="contato">
-<div id="header"></div>
+<header id="header"></header>
 <main>
-<section class="sec gray"><div class="container">
-  <div class="page-title"><h1>Entre em Contato</h1><p>Estamos à disposição para tirar dúvidas, receber sugestões e discutir parcerias</p></div>
-  <div class="contact">
-    <div class="card"><div class="hd"><h3>Informações de Contato</h3><p class="desc">Fale com a gente pelos canais abaixo</p></div><div class="ct" style="margin-top:0;padding-top:24px"><div class="info-list" id="info"></div></div></div>
-    <div class="card"><div class="hd"><h3>Envie uma Mensagem</h3><p class="desc">Preencha o formulário e responderemos em breve</p></div><div class="ct" style="margin-top:0;padding-top:24px">
+
+<section class="hero short">
+  <div class="bg" style="background-image:url('img/fotos/equipe-campo-2026.webp');background-position:center 40%"></div>
+  <div class="container"><span class="eyebrow">Contato</span><h1>Fale com<br>a gente</h1>
+    <p class="lead">Patrocínio, imprensa, parcerias ou vontade de entrar para a equipe.</p></div>
+</section>
+<section class="sec">
+  <div class="container split" style="align-items:start">
+    <div>
+      <div id="infos"></div>
+      <div class="card" style="margin-top:10px" id="inscricao">
+        <h3>Quero fazer parte</h3>
+        <p>O processo seletivo é aberto a estudantes da UFRJ de qualquer curso. As datas são divulgadas no Instagram <a href="https://www.instagram.com/minerva.aeroespacial/" target="_blank" rel="noopener" style="text-decoration:underline">@minerva.aeroespacial</a>.</p>
+        <img src="img/logos/qr-instagram.webp" alt="QR code do Instagram @minerva.aeroespacial" style="width:150px;margin-top:16px;border-radius:10px" loading="lazy">
+      </div>
+    </div>
+    <div class="card">
+      <h3>Envie uma mensagem</h3>
+      <p class="mut" style="margin-bottom:18px">O formulário abre o seu programa de e-mail com a mensagem pronta.</p>
       <form class="form" id="form">
-        <div class="two"><div class="field"><label for="nome">Nome</label><input id="nome" name="nome" required></div>
-        <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" required></div></div>
-        <div class="field"><label for="assunto">Assunto</label><select id="assunto" name="assunto"><option>Dúvida</option><option>Parceria</option><option>Projetos de pesquisa</option><option>Imprensa</option><option>Outro</option></select></div>
-        <div class="field"><label for="msg">Mensagem</label><textarea id="msg" name="msg" rows="6" required></textarea></div>
-        <button class="btn btn-primary btn-lg" type="submit">Enviar mensagem</button>
-        <div class="notice" id="notice">Seu aplicativo de e-mail foi aberto com a mensagem pronta para envio.</div>
-      </form></div></div>
+        <div class="two"><label>Nome<input name="nome" required autocomplete="name"></label><label>E-mail<input name="email" type="email" required autocomplete="email"></label></div>
+        <label>Empresa ou instituição (opcional)<input name="org" autocomplete="organization"></label>
+        <div class="two">
+          <label>Assunto<select name="assunto"><option value="patrocinio">Patrocínio e parcerias</option><option value="participar">Quero fazer parte</option><option value="imprensa">Imprensa</option><option value="outro">Outro assunto</option></select></label>
+          <label>Para<select name="equipe"><option value="rockets">Minerva Rockets</option><option value="sats">Minerva Sats</option></select></label>
+        </div>
+        <label>Mensagem<textarea name="msg" rows="6" required></textarea></label>
+        <button class="btn btn-red" type="submit" style="justify-content:center">Enviar mensagem</button>
+        <div class="notice" id="notice" style="display:none">Se o seu programa de e-mail não abriu, escreva direto para minervarockets@poli.ufrj.br ou minervasats@poli.ufrj.br.</div>
+      </form>
+    </div>
   </div>
-</div></section>
+</section>
+
 </main>
-<div id="footer"></div>
-<script src="posts.js"></script>
+<footer id="footer"></footer>
+<script src="dados.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

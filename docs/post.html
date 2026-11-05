@@ -3,25 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Publicação — Minerva</title>
-<meta name="description" content="Minerva — pesquisa aplicada, projetos, sistemas e publicações.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%232563eb'/><text x='16' y='22' font-family='Arial' font-weight='700' font-size='16' fill='white' text-anchor='middle'>M</text></svg>">
+<title>Notícia — Minerva Aeroespacial</title>
+<meta name="description" content="Notícia da Minerva Aeroespacial.">
+<meta property="og:title" content="Notícia — Minerva Aeroespacial">
+<meta property="og:description" content="Notícia da Minerva Aeroespacial.">
+<meta property="og:image" content="img/fotos/equipe-2026.webp">
+<meta name="theme-color" content="#07080c">
+<link rel="icon" href="img/logos/minerva-aeroespacial.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="post">
-<div id="header"></div>
+<header id="header"></header>
 <main>
-<section class="post-hero" id="post-head"></section>
-<div id="post-body"></div>
-<section class="sec gray"><div class="container">
-  <div class="sec-title"><h2>Continue lendo</h2><p>Outras publicações que podem interessar você</p></div>
-  <div class="grid g32" id="related"></div>
-</div></section>
+
+<section class="sec"><div class="container"><article class="article" id="artigo"></article></div></section>
+<section class="sec alt"><div class="container"><h2>Outras notícias</h2><div class="grid g3" id="outras" style="margin-top:24px"></div></div></section>
+
 </main>
-<div id="footer"></div>
-<script src="posts.js"></script>
+<footer id="footer"></footer>
+<script src="dados.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
