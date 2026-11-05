@@ -192,7 +192,7 @@ function rockets() {
     .map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
   $("conquistas").innerHTML = linhaDoTempo(CONQUISTAS.filter(c => c.equipe === "rockets"));
   $("doe").innerHTML = doacaoHTML();
-  $("videos").innerHTML = videosHTML(VIDEOS.filter(v => /Lançamento|Teste|sonda/i.test(v.titulo)));
+  $("videos").innerHTML = videosHTML(VIDEOS.filter(v => /^(Lançamento|Teste|Lançamos)/.test(v.titulo)));
 }
 
 function sats() {
