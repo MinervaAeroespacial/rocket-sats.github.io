@@ -99,7 +99,7 @@ function revelar() {
 
 /* ---------- peças reutilizáveis ---------- */
 const membrosAtuais = () => MEMBROS[CICLOS[0].id];
-const equipeDaArea = a => (SUBTEAMS.find(s => s.id === a) || {}).equipe || ({ diretoria: "geral", "diretoria-rockets": "rockets", "diretoria-sats": "sats", "adm-geral": "adm", hemera: "rockets" }[a]);
+const equipeDaArea = a => (SUBTEAMS.find(s => s.id === a) || {}).equipe || AREAS[a]?.equipe || ({ diretoria: "geral", "diretoria-rockets": "rockets", "diretoria-sats": "sats", "adm-geral": "adm", hemera: "rockets" }[a]);
 
 function cardPessoa(m) {
   const c = corEquipe(equipeDaArea(m.area));
@@ -236,7 +236,7 @@ function subteams() {
 function equipe() {
   let ciclo = CICLOS.some(c => c.id === param("ciclo")) ? param("ciclo") : CICLOS[0].id;
   let time = param("equipe") || "todas";
-  const ordem = ["diretoria", "diretoria-rockets", "aeroestruturas", "propulsao", "eletronica-rockets", "recuperacao", "adm-geral", "operacoes", "marketing", "gestao", "financeiro", "diretoria-sats", "eletronica-sats", "mecanica-sats", "payload-sats", "hemera"];
+  const ordem = ["diretoria", "diretoria-rockets", "aerodinamica", "aeroestruturas", "propulsao", "eletronica-rockets", "avionica", "instrumentacao", "recuperacao", "adm-geral", "operacoes", "marketing", "gestao", "financeiro", "diretoria-sats", "eletronica-sats", "mecanica-sats", "payload-sats", "experimentos", "hemera"];
   const nomeArea = a => AREAS[a]?.nome || (s => `${s.nome} — ${nomeEquipe(s.equipe)}`)(SUBTEAMS.find(s => s.id === a));
   const desenha = () => {
     $("ciclos").innerHTML = CICLOS.map(c => `<button class="chip ${c.id === ciclo ? "on" : ""}" data-c="${c.id}">${c.nome}${c.id === CICLOS[0].id ? " (atual)" : ""}</button>`).join("");
@@ -260,23 +260,83 @@ function equipe() {
   desenha();
 }
 
+/* carrega o visualizador 3D (model-viewer) só quando algum projeto tiver modelo */
+let mvPronto = null;
+const carregarModelViewer = () => mvPronto ||= new Promise(res => {
+  const s = document.createElement("script"); s.type = "module";
+  s.src = "js/model-viewer.min.js"; /* @google/model-viewer 3.5.0, licença Apache-2.0 */
+  s.onload = res; s.onerror = res; document.head.appendChild(s);
+});
+
 function projetos() {
   let ano = param("ano") || "todos", time = param("equipe") || "todas";
+  let atual = (location.hash || "").slice(1);
   const anos = [...new Set(PROJETOS.map(p => p.ano).filter(Boolean))].sort((a, b) => b - a);
-  $("strip").innerHTML = PROJETOS.map(p => `<button data-id="${p.id}"><img src="${esc(p.imagem)}" alt="" loading="lazy" style="${p.contain ? "object-fit:contain" : ""}"><b>${esc(p.nome)}</b><small>${esc(p.periodo)} · ${p.equipe === "rockets" ? "Rockets" : "Sats"}</small></button>`).join("");
-  $("strip").onclick = e => { const b = e.target.closest("button"); if (!b) return; ano = "todos"; time = "todas"; setParam("ano", ""); setParam("equipe", ""); desenha(); document.getElementById(b.dataset.id)?.scrollIntoView({ behavior: "smooth" }); };
+  const filtrados = () => PROJETOS.filter(p => (ano === "todos" || String(p.ano) === ano) && (time === "todas" || p.equipe === time));
+  const stCls = s => ({ "Concluído": "ok", "Em desenvolvimento": "dev", "Em reconstrução": "warn", "Futuro": "" }[s] ?? "");
+
+  const palco = p => {
+    if (p.modelo) { carregarModelViewer();
+      return `<model-viewer src="${esc(p.modelo)}" poster="${esc(p.imagem)}" alt="Modelo 3D do ${esc(p.nome)}" camera-controls auto-rotate auto-rotate-delay="0" rotation-per-second="18deg" interaction-prompt="none" shadow-intensity="1" exposure="1.1" ${p.orbita ? `camera-orbit="${esc(p.orbita)}"` : ""}></model-viewer>
+        <span class="sel-hint">${ic("arrow")} Arraste para girar · role para aproximar</span>`; }
+    return `<img class="${p.contain ? "contain" : ""}" src="${esc(p.imagem)}" alt="${esc(p.nome)}">`;
+  };
+
+  const mostra = (lista, id) => {
+    const i = Math.max(0, lista.findIndex(p => p.id === id));
+    const p = lista[i]; atual = p.id;
+    history.replaceState(null, "", location.pathname + location.search + "#" + p.id);
+    const c = corEquipe(p.equipe);
+    $("sel-stage").className = `sel-stage ${c}`;
+    $("sel-stage").innerHTML = `
+      <div class="sel-info">
+        <div class="row"><span class="badge ${c}">${nomeEquipe(p.equipe)}</span><span class="badge">${esc(p.periodo)}</span><span class="badge ${stCls(p.status)}">${esc(p.status)}</span></div>
+        <h2 class="sel-nome">${esc(p.nome)}</h2>
+        <p class="sel-tipo">${esc(p.tipo)}</p>
+        ${p.specs ? `<dl class="sel-specs">${p.specs.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>` : ""}
+        <p>${esc(p.resumo)}</p>
+        ${p.marcos.length ? `<ul class="sel-marcos">${p.marcos.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+        <div class="sel-acoes">
+          ${p.video ? `<button class="btn btn-ghost" data-video="${esc(p.video)}" data-titulo="${esc(p.nome)}">${ic("play")} Assistir ao lançamento</button>` : ""}
+          ${p.id === "hemera-v1" ? `<a class="btn btn-red" href="${esc(SITE.doacao.url)}" target="_blank" rel="noopener">${ic("heart")} Ajude a reconstruir</a>` : ""}
+        </div>
+      </div>
+      <div class="sel-view">
+        <div class="sel-plat"></div>
+        ${palco(p)}
+        <button class="sel-nav prev" aria-label="Projeto anterior">${ic("arrow")}</button>
+        <button class="sel-nav next" aria-label="Próximo projeto">${ic("arrow")}</button>
+        <span class="sel-count">${String(i + 1).padStart(2, "0")} / ${String(lista.length).padStart(2, "0")}</span>
+      </div>`;
+    $("sel-stage").querySelector(".prev").onclick = () => mostra(lista, lista[(i - 1 + lista.length) % lista.length].id);
+    $("sel-stage").querySelector(".next").onclick = () => mostra(lista, lista[(i + 1) % lista.length].id);
+    $("roster").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.id === p.id));
+    $("roster").querySelector(".on")?.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+  };
+
   const desenha = () => {
     $("anos").innerHTML = [["todos", "Todos"], ...anos.map(a => [String(a), String(a)])].map(([v, t]) => `<button class="chip ${v === ano ? "on" : ""}" data-a="${v}">${t}</button>`).join("");
     $("times").innerHTML = [["todas", "Todas", ""], ["rockets", "Rockets", "r"], ["sats", "Sats", "b"]].map(([v, t, c]) => `<button class="chip ${c} ${v === time ? "on" : ""}" data-t="${v}">${t}</button>`).join("");
-    const lista = PROJETOS.filter(p => (ano === "todos" || String(p.ano) === ano) && (time === "todas" || p.equipe === time));
-    $("lista").innerHTML = lista.length ? lista.map(p => cardProjeto(p, p.destaque && ano === "todos" && time !== "sats" ? "featured" : "")).join("") : `<div class="notice">Nenhum projeto com esse filtro.</div>`;
+    const lista = filtrados();
     $("conquistas").innerHTML = linhaDoTempo(CONQUISTAS.filter(c => (ano === "todos" || String(c.ano) === ano) && (time === "todas" || c.equipe === time || c.equipe === "geral")));
+    if (!lista.length) { $("roster").innerHTML = ""; $("sel-stage").className = "sel-stage"; $("sel-stage").innerHTML = `<div class="notice">Nenhum projeto com esse filtro.</div>`; revelar(); return; }
+    $("roster").innerHTML = lista.map(p => `<button class="${corEquipe(p.equipe)}" data-id="${p.id}" title="${esc(p.nome)}">
+      <span class="ri"><img src="${esc(p.imagem)}" alt="" loading="lazy" style="${p.contain ? "object-fit:contain" : ""}">${p.modelo ? `<i class="r3d">3D</i>` : ""}</span>
+      <b>${esc(p.nome)}</b><small>${esc(p.periodo)}</small></button>`).join("");
+    mostra(lista, lista.some(p => p.id === atual) ? atual : lista[0].id);
     revelar();
   };
+
+  $("roster").onclick = e => { const b = e.target.closest("button"); if (b) mostra(filtrados(), b.dataset.id); };
+  document.addEventListener("keydown", e => {
+    if (e.target.closest("input, textarea, model-viewer") || !["ArrowLeft", "ArrowRight"].includes(e.key)) return;
+    const l = filtrados(); if (!l.length) return;
+    const i = l.findIndex(p => p.id === atual);
+    mostra(l, l[(i + (e.key === "ArrowRight" ? 1 : -1) + l.length) % l.length].id);
+  });
   $("anos").onclick = e => { const b = e.target.closest(".chip"); if (!b) return; ano = b.dataset.a; setParam("ano", ano === "todos" ? "" : ano); desenha(); };
   $("times").onclick = e => { const b = e.target.closest(".chip"); if (!b) return; time = b.dataset.t; setParam("equipe", time === "todas" ? "" : time); desenha(); };
   desenha();
-  if (location.hash) setTimeout(() => document.querySelector(location.hash)?.scrollIntoView(), 50);
 }
 
 function parceiros() {
