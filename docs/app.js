@@ -37,6 +37,7 @@ const ic = (n, cls = "") => `<svg class="svg ${cls}" viewBox="0 0 24 24" aria-hi
 
 /* desenhos blueprint das subequipes administrativas */
 const BP = {
+  diretoria: `<svg viewBox="0 0 220 160" fill="none" stroke="#e6f0ff" stroke-width="2" stroke-linejoin="round"><circle cx="110" cy="80" r="56"/><circle cx="110" cy="80" r="42" stroke-dasharray="3 5"/><path d="M110 30l9 36 37 14-37 14-9 36-9-36-37-14 37-14z"/><circle cx="110" cy="80" r="5"/><path d="M110 14v10M110 136v10M44 80h10M166 80h10"/></svg>`,
   logistica: `<svg viewBox="0 0 220 160" fill="none" stroke="#e6f0ff" stroke-width="2" stroke-linejoin="round"><rect x="20" y="50" width="110" height="70" rx="4"/><path d="M130 72h38l26 26v22h-64z"/><path d="M140 80h24l16 16h-40z"/><circle cx="55" cy="126" r="13"/><circle cx="165" cy="126" r="13"/><circle cx="55" cy="126" r="4"/><circle cx="165" cy="126" r="4"/><path d="M35 70h30v30H35zM75 70h30v30H75z" stroke-dasharray="4 3"/><path d="M10 140h200" stroke-dasharray="2 6"/></svg>`,
   marketing: `<svg viewBox="0 0 220 160" fill="none" stroke="#e6f0ff" stroke-width="2" stroke-linejoin="round"><path d="M40 65h30l70-35v100L70 95H40z"/><path d="M50 95l12 40h18l-10-40"/><path d="M160 55c12 8 12 42 0 50"/><path d="M175 42c22 16 22 60 0 76"/><path d="M40 65v30" stroke-dasharray="3 3"/><circle cx="140" cy="80" r="4"/></svg>`,
   gestao: `<svg viewBox="0 0 220 160" fill="none" stroke="#e6f0ff" stroke-width="2" stroke-linejoin="round"><rect x="85" y="14" width="50" height="30" rx="4"/><rect x="20" y="104" width="50" height="30" rx="4"/><rect x="85" y="104" width="50" height="30" rx="4"/><rect x="150" y="104" width="50" height="30" rx="4"/><path d="M110 44v30M45 74h130M45 74v30M110 74v30M175 74v30"/><circle cx="110" cy="29" r="6"/><circle cx="45" cy="119" r="6"/><circle cx="110" cy="119" r="6"/><circle cx="175" cy="119" r="6"/></svg>`,
@@ -50,7 +51,7 @@ const MESES = ["jan.", "fev.", "mar.", "abr.", "mai.", "jun.", "jul.", "ago.", "
 const quando = d => { const [a, m] = String(d).split("-"); return m ? `${MESES[+m - 1]} ${a}` : a; };
 const iniciais = n => { const w = n.split(" ").filter(Boolean); return (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : "")).toUpperCase(); };
 const corEquipe = e => ({ rockets: "r", sats: "b", adm: "g", geral: "g" }[e] || "n");
-const nomeEquipe = e => ({ rockets: "Minerva Rockets", sats: "Minerva Sats", adm: "Administrativo" }[e] || "");
+const nomeEquipe = e => ({ rockets: "Minerva Rockets", sats: "Minerva Sats", adm: "Administrativo", geral: "Rockets e Sats" }[e] || "");
 const param = k => new URLSearchParams(location.search).get(k);
 const setParam = (k, v) => { const u = new URL(location); v ? u.searchParams.set(k, v) : u.searchParams.delete(k); history.replaceState(null, "", u); };
 
@@ -98,7 +99,7 @@ function revelar() {
 
 /* ---------- peças reutilizáveis ---------- */
 const membrosAtuais = () => MEMBROS[CICLOS[0].id];
-const equipeDaArea = a => (SUBTEAMS.find(s => s.id === a) || {}).equipe || ({ "diretoria-rockets": "rockets", "diretoria-sats": "sats", "adm-geral": "adm", hemera: "rockets" }[a]);
+const equipeDaArea = a => (SUBTEAMS.find(s => s.id === a) || {}).equipe || ({ diretoria: "geral", "diretoria-rockets": "rockets", "diretoria-sats": "sats", "adm-geral": "adm", hemera: "rockets" }[a]);
 
 function cardPessoa(m) {
   const c = corEquipe(equipeDaArea(m.area));
@@ -187,7 +188,7 @@ function home() {
 }
 
 function rockets() {
-  const n = membrosAtuais().filter(m => equipeDaArea(m.area) === "rockets").length;
+  const n = membrosAtuais().filter(m => equipeDaArea(m.area) === "rockets" || (m.area === "diretoria" && /Rockets/.test(m.cargo))).length;
   $("stats").innerHTML = [[n, "Membros técnicos e de diretoria"], ["4", "Subequipes técnicas"], ["13+", "Cursos na equipe"], ["2", "Competições em 2026"]]
     .map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
   $("conquistas").innerHTML = linhaDoTempo(CONQUISTAS.filter(c => c.equipe === "rockets"));
@@ -196,7 +197,7 @@ function rockets() {
 }
 
 function sats() {
-  const n = membrosAtuais().filter(m => equipeDaArea(m.area) === "sats").length;
+  const n = membrosAtuais().filter(m => equipeDaArea(m.area) === "sats" || (m.area === "diretoria" && /Sats/.test(m.cargo))).length;
   $("stats").innerHTML = [[n, "Membros"], ["TRL 5", "CariocaSat em 2025"], ["3º", "INPE CubeDesign 2024"], ["1º", "CubeSat — LASC 2022"]]
     .map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
   $("missoes").innerHTML = PROJETOS.filter(p => p.equipe === "sats" && p.id !== "cariocasat").map(p => `
@@ -211,15 +212,17 @@ function subteams() {
   $("filtros").innerHTML = [["todas", "Todas", ""], ["rockets", "Rockets", "r"], ["sats", "Sats", "b"], ["adm", "Administrativo", "g"]]
     .map(([v, t, c]) => `<button class="chip ${c} ${v === filtro ? "on" : ""}" data-v="${v}">${t}</button>`).join("");
   const desenha = f => {
-    $("subteams").innerHTML = SUBTEAMS.filter(s => f === "todas" || s.equipe === f).map(s => {
+    $("subteams").innerHTML = SUBTEAMS.filter(s => f === "todas" || s.equipe === f || s.equipe === "geral").map(s => {
       const gente = pessoas.filter(m => m.area === s.id);
+      const profs = s.id === "diretoria" ? SITE.orientadores : [];
       const lideres = gente.filter(m => m.lider), demais = gente.filter(m => !m.lider);
       const arte = s.arte.startsWith("svg:") ? BP[s.arte.slice(4)] : `<img src="${s.arte}" alt="" loading="lazy">`;
       return `<details class="blueprint ${corEquipe(s.equipe) === "b" ? "" : corEquipe(s.equipe)}" id="${s.id}">
-        <summary><div class="art">${arte}</div><h3>${esc(s.nome)}</h3><div class="team-lbl">${nomeEquipe(s.equipe)} · ${gente.length} membros</div>
+        <summary><div class="art">${arte}</div><h3>${esc(s.nome)}</h3><div class="team-lbl">${nomeEquipe(s.equipe)} · ${gente.length} membros${profs.length ? ` + ${profs.length} orientadores` : ""}</div>
         <span class="more">Ver detalhes ${ic("down")}</span></summary>
         <div class="body"><p>${esc(s.desc)}</p>
           ${lideres.length ? `<p style="margin:14px 0 4px"><b>Liderança</b></p><div class="people">${lideres.map(m => `<span class="pill lead">${esc(m.nome)} — ${esc(m.cargo)}</span>`).join("")}</div>` : ""}
+          ${profs.length ? `<p style="margin:14px 0 4px"><b>Professores orientadores</b></p><div class="people">${profs.map(o => `<span class="pill lead">${esc(o.nome)} — ${esc(o.depto)}</span>`).join("")}</div>` : ""}
           ${demais.length ? `<p style="margin:14px 0 4px"><b>Membros</b></p><div class="people">${demais.map(m => `<span class="pill">${esc(m.nome)}${m.cargo !== "Integrante" ? " — " + esc(m.cargo) : ""}</span>`).join("")}</div>` : ""}
         </div></details>`;
     }).join("");
@@ -233,14 +236,14 @@ function subteams() {
 function equipe() {
   let ciclo = CICLOS.some(c => c.id === param("ciclo")) ? param("ciclo") : CICLOS[0].id;
   let time = param("equipe") || "todas";
-  const ordem = ["diretoria-rockets", "aeroestruturas", "propulsao", "eletronica-rockets", "recuperacao", "adm-geral", "operacoes", "marketing", "gestao", "financeiro", "diretoria-sats", "eletronica-sats", "mecanica-sats", "payload-sats", "hemera"];
+  const ordem = ["diretoria", "diretoria-rockets", "aeroestruturas", "propulsao", "eletronica-rockets", "recuperacao", "adm-geral", "operacoes", "marketing", "gestao", "financeiro", "diretoria-sats", "eletronica-sats", "mecanica-sats", "payload-sats", "hemera"];
   const nomeArea = a => AREAS[a]?.nome || (s => `${s.nome} — ${nomeEquipe(s.equipe)}`)(SUBTEAMS.find(s => s.id === a));
   const desenha = () => {
     $("ciclos").innerHTML = CICLOS.map(c => `<button class="chip ${c.id === ciclo ? "on" : ""}" data-c="${c.id}">${c.nome}${c.id === CICLOS[0].id ? " (atual)" : ""}</button>`).join("");
     $("times").innerHTML = [["todas", "Todas", ""], ["rockets", "Rockets", "r"], ["sats", "Sats", "b"], ["adm", "Administrativo", "g"]]
       .map(([v, t, c]) => `<button class="chip ${c} ${v === time ? "on" : ""}" data-t="${v}">${t}</button>`).join("");
     const cic = CICLOS.find(c => c.id === ciclo);
-    const lista = MEMBROS[ciclo].filter(m => time === "todas" || equipeDaArea(m.area) === time || m.area === "hemera");
+    const lista = MEMBROS[ciclo].filter(m => time === "todas" || equipeDaArea(m.area) === time || m.area === "hemera" || m.area === "diretoria");
     $("ciclo-desc").textContent = `${cic.desc} ${lista.length} pessoas.`;
     $("team").innerHTML = ordem.map(a => {
       const gente = lista.filter(m => m.area === a).sort((x, y) => y.lider - x.lider);

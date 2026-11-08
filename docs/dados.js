@@ -32,6 +32,7 @@ const SITE = {
   orientadores: [
     { nome: "Prof. Fernando Augusto de Noronha Castro Pinto", depto: "Departamento de Engenharia Mecânica — POLI" },
     { nome: "Prof. Claudio Miceli de Farias", depto: "Departamento de Engenharia da Computação e Eletrônica — POLI" },
+    { nome: "Prof. Fabio Krykhtine", depto: "Escola Politécnica — UFRJ" },
   ],
 };
 
@@ -39,6 +40,8 @@ const SITE = {
    equipe: "rockets" | "sats" | "adm"
    arte: imagem blueprint em img/subteams/ (ou "svg:<nome>" para os desenhos do app.js) */
 const SUBTEAMS = [
+  { id: "diretoria", equipe: "geral", nome: "Diretoria e Orientadores", arte: "svg:diretoria",
+    desc: "Conduz as duas equipes: presidência, direção e gerência de projetos da Minerva Rockets e da Minerva Sats, gerência administrativa e os professores orientadores que respondem academicamente pelo grupo." },
   { id: "aeroestruturas", equipe: "rockets", nome: "Aeroestruturas", arte: "img/subteams/aero.webp",
     desc: "Projeta e fabrica a fuselagem modular em compósito de fibra de vidro e epóxi, a coifa Von Kármán, as aletas enflechadas com revestimento de fibra de carbono e os acopladores usinados em alumínio 6101-T6. Também cuida da análise estrutural e do desempenho de voo." },
   { id: "propulsao", equipe: "rockets", nome: "Propulsão", arte: "img/subteams/prop.webp",
@@ -65,7 +68,7 @@ const SUBTEAMS = [
 
 /* ---------- CICLOS E MEMBROS ----------
    O primeiro ciclo da lista é o atual.
-   area: id de uma subequipe acima, ou "diretoria-rockets", "diretoria-sats", "adm-geral", "hemera"
+   area: id de uma subequipe acima (a diretoria geral é "diretoria"), ou "diretoria-rockets", "diretoria-sats", "adm-geral", "hemera"
    lider: true destaca a pessoa no topo da área
    foto (opcional): "img/equipe/2026-2/nome-sobrenome.webp" — publique só com autorização (LGPD) */
 const CICLOS = [
@@ -74,6 +77,7 @@ const CICLOS = [
 ];
 
 const AREAS = {
+  "diretoria": { nome: "Diretoria", cor: "g" },
   "diretoria-rockets": { nome: "Diretoria — Minerva Rockets", cor: "r" },
   "diretoria-sats": { nome: "Diretoria — Minerva Sats", cor: "b" },
   "adm-geral": { nome: "Gerência Administrativa", cor: "g" },
@@ -85,9 +89,9 @@ const M = (nome, area, cargo, lider = false) => ({ nome, area, cargo, lider });
 const MEMBROS = {
   "2026-2": [
     // Minerva Rockets
-    M("Pablo Moura", "diretoria-rockets", "Presidente Rockets", true),
-    M("Laurent Janod", "diretoria-rockets", "Diretoria Rockets", true),
-    M("João Victor Macena", "diretoria-rockets", "Gerente de Projetos", true),
+    M("Pablo Moura", "diretoria", "Presidente Rockets", true),
+    M("Laurent Janod", "diretoria", "Diretoria Rockets", true),
+    M("João Victor Macena", "diretoria", "Gerente de Projetos Rockets", true),
     M("Beatriz Perecmanis", "aeroestruturas", "Gerente Técnica de Aeroestruturas", true),
     M("Albert Schild", "aeroestruturas", "Integrante"), M("Bernardo Cid", "aeroestruturas", "Integrante"),
     M("Núbia Teixeira", "aeroestruturas", "Integrante"), M("Ana Júlia", "aeroestruturas", "Integrante"),
@@ -109,7 +113,7 @@ const MEMBROS = {
     M("Joyce Raíssa", "propulsao", "Integrante"), M("Ari Gabriel", "propulsao", "Integrante"),
     M("Inês Vilanova", "propulsao", "Integrante"),
     // Administrativo
-    M("Rafael Silva", "adm-geral", "Gerente Administrativo", true),
+    M("Rafael Silva", "diretoria", "Gerente Administrativo", true),
     M("Júlia Zerbati", "operacoes", "Gerente de Operações e Logística", true),
     M("Marcelo Bastos", "operacoes", "Integrante"), M("João Rodrigues", "operacoes", "Integrante"),
     M("Juliana Souza", "operacoes", "Integrante"),
@@ -121,7 +125,7 @@ const MEMBROS = {
     M("Willian Rocha", "financeiro", "Gerente do Financeiro", true),
     M("Laura Camargo", "financeiro", "Integrante"), M("Willian Santos", "financeiro", "Integrante"),
     // Minerva Sats
-    M("Manuella Oliveira", "diretoria-sats", "Presidente e Gerente de Projetos Sats", true),
+    M("Manuella Oliveira", "diretoria", "Presidente e Gerente de Projetos Sats", true),
     M("Gabrielle Fernandes", "eletronica-sats", "Gerente Técnica de Eletrônica", true),
     M("Lucas Pacheco", "eletronica-sats", "Vice-Gerente de Eletrônica", true),
     M("Rafael Bernardino", "eletronica-sats", "Especialista em Eletrônica"),
