@@ -31,8 +31,19 @@
   <div class="container">
     <div class="filter-row"><div><label>Ano</label></div><div class="chips" id="anos"></div></div>
     <div class="filter-row"><div><label>Equipe</label></div><div class="chips" id="times"></div></div>
-    <div class="sel-stage" id="sel-stage"></div>
-    <div class="roster" id="roster" aria-label="Escolha um projeto"></div>
+    <div class="crt" id="crt">
+      <div class="crt-info" id="crt-info" aria-live="polite"></div>
+      <div class="crt-stage">
+        <div class="crt-line" id="crt-line">
+          <div class="crt-spot"></div><div class="crt-floor"></div>
+          <div class="crt-track" id="crt-track" aria-label="Escolha um projeto"></div>
+          <button class="crt-nav" id="crt-prev" aria-label="Projeto anterior"><svg class="svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+          <button class="crt-nav" id="crt-next" aria-label="Próximo projeto"><svg class="svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
+        <div class="crt-cap"><b id="crt-nome"></b><div class="crt-anos" id="crt-anos"></div></div>
+      </div>
+    </div>
+    <div class="crt-extra" id="crt-extra"></div>
   </div>
 </section>
 <section class="sec alt">

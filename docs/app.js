@@ -30,6 +30,7 @@ const P = {
   in: '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>',
   fb: '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
   play: '<path d="M6 4l14 8-14 8z"/>',
+  star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
   heart: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/>',
   ext: '<path d="M15 3h6v6"/><path d="M10 14L21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
 };
@@ -268,18 +269,41 @@ const carregarModelViewer = () => mvPronto ||= new Promise(res => {
   s.onload = res; s.onerror = res; document.head.appendChild(s);
 });
 
+/* desenho do veículo na fila (até a equipe ter recortes PNG ou modelos 3D)
+   perfil: { tipo: "foguete" | "cubesat", alt, larg, estagios, u } */
+function silhueta(p) {
+  const f = Object.assign(p.equipe === "sats" ? { tipo: "cubesat", u: 2 } : { tipo: "foguete", alt: .8, larg: 1, estagios: 1 }, p.perfil || {});
+  const acc = p.equipe === "sats" ? "#2b7be4" : "#e8312f";
+  if (f.tipo === "cubesat") {
+    const u = f.u || 1, H = 40 + u * 36, y0 = H - u * 36 - 6;
+    let cel = ""; for (let i = 0; i < u * 3; i++) cel += `<rect x="4" y="${y0 + 4 + i * 12}" width="20" height="9" fill="#1d3f7a" stroke="#5aa0ff" stroke-width=".6"/><rect x="76" y="${y0 + 4 + i * 12}" width="20" height="9" fill="#1d3f7a" stroke="#5aa0ff" stroke-width=".6"/>`;
+    let un = ""; for (let i = 0; i < u; i++) un += `<rect x="32" y="${y0 + i * 36}" width="36" height="36" fill="#d9dee7" stroke="#8a93a6"/><rect x="36" y="${y0 + 4 + i * 36}" width="28" height="28" fill="#1a2233"/><circle cx="50" cy="${y0 + 18 + i * 36}" r="3" fill="${acc}"/>`;
+    return `<svg viewBox="0 0 100 ${H}" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><rect x="24" y="${y0 + u * 18 - 1}" width="8" height="2" fill="#8a93a6"/><rect x="68" y="${y0 + u * 18 - 1}" width="8" height="2" fill="#8a93a6"/>${cel}${un}<rect x="30" y="${y0 - 3}" width="4" height="${u * 36 + 6}" fill="#aab2c2"/><rect x="66" y="${y0 - 3}" width="4" height="${u * 36 + 6}" fill="#aab2c2"/></svg>`;
+  }
+  const W = 14 * (f.larg || 1), H = 400, nose = W * 4.2, x = 30 - W / 2, est = f.estagios || 1;
+  const fins = yb => `<path d="M${x} ${yb - 46}L${x - 13} ${yb - 6}L${x - 13} ${yb}L${x} ${yb}Z" fill="${acc}"/><path d="M${x + W} ${yb - 46}L${x + W + 13} ${yb - 6}L${x + W + 13} ${yb}L${x + W} ${yb}Z" fill="${acc}"/><rect x="${29.3}" y="${yb - 44}" width="1.4" height="44" fill="#7d1714"/>`;
+  let st = `<path d="M30 6 C${x + W + 1} ${nose * .45} ${x + W} ${nose * .8} ${x + W} ${nose}L${x} ${nose}C${x} ${nose * .8} ${x - 1} ${nose * .45} 30 6Z" fill="#eef1f6"/>
+    <rect x="${x}" y="${nose}" width="${W}" height="${H - nose - 6}" fill="#e3e7ee"/>
+    <rect x="${x}" y="${nose + 30}" width="${W}" height="10" fill="${acc}"/><rect x="${x}" y="${nose + 120}" width="${W}" height="4" fill="#1b1f2a"/>
+    <rect x="${x}" y="${H * .55}" width="${W}" height="${H * .2}" fill="${acc}"/><rect x="${x + W * .62}" y="${nose}" width="${W * .38}" height="${H - nose - 6}" fill="#000" opacity=".12"/>
+    ${fins(H - 6)}<rect x="${x + 2}" y="${H - 6}" width="${W - 4}" height="6" fill="#3a3f4b"/>`;
+  if (est > 1) st += `<rect x="${x}" y="${H * .5}" width="${W}" height="5" fill="#1b1f2a"/>${fins(H * .5)}`;
+  return `<svg viewBox="0 0 60 ${H}" preserveAspectRatio="xMidYMax meet" aria-hidden="true">${st}</svg>`;
+}
+
 function projetos() {
   let ano = param("ano") || "todos", time = param("equipe") || "todas";
   let atual = (location.hash || "").slice(1);
   const anos = [...new Set(PROJETOS.map(p => p.ano).filter(Boolean))].sort((a, b) => b - a);
   const filtrados = () => PROJETOS.filter(p => (ano === "todos" || String(p.ano) === ano) && (time === "todas" || p.equipe === time));
-  const stCls = s => ({ "Concluído": "ok", "Em desenvolvimento": "dev", "Em reconstrução": "warn", "Futuro": "" }[s] ?? "");
+  const anoTxt = p => p.ano || p.periodo;
+  const altura = p => (p.perfil?.alt ?? (p.equipe === "sats" ? .45 : .8));
 
-  const palco = p => {
-    if (p.modelo) { carregarModelViewer();
-      return `<model-viewer src="${esc(p.modelo)}" poster="${esc(p.imagem)}" alt="Modelo 3D do ${esc(p.nome)}" camera-controls auto-rotate auto-rotate-delay="0" rotation-per-second="18deg" interaction-prompt="none" shadow-intensity="1" exposure="1.1" ${p.orbita ? `camera-orbit="${esc(p.orbita)}"` : ""}></model-viewer>
-        <span class="sel-hint">${ic("arrow")} Arraste para girar · role para aproximar</span>`; }
-    return `<img class="${p.contain ? "contain" : ""}" src="${esc(p.imagem)}" alt="${esc(p.nome)}">`;
+  const visual = (p, sel) => {
+    if (sel && p.modelo) { carregarModelViewer();
+      return `<model-viewer src="${esc(p.modelo)}" alt="Modelo 3D do ${esc(p.nome)}" camera-controls auto-rotate rotation-per-second="18deg" interaction-prompt="none" shadow-intensity="1" ${p.orbita ? `camera-orbit="${esc(p.orbita)}"` : ""}></model-viewer>`; }
+    if (p.recorte) return `<img src="${esc(p.recorte)}" alt="${esc(p.nome)}">`;
+    return silhueta(p);
   };
 
   const mostra = (lista, id) => {
@@ -287,31 +311,36 @@ function projetos() {
     const p = lista[i]; atual = p.id;
     history.replaceState(null, "", location.pathname + location.search + "#" + p.id);
     const c = corEquipe(p.equipe);
-    $("sel-stage").className = `sel-stage ${c}`;
-    $("sel-stage").innerHTML = `
-      <div class="sel-info">
-        <div class="row"><span class="badge ${c}">${nomeEquipe(p.equipe)}</span><span class="badge">${esc(p.periodo)}</span><span class="badge ${stCls(p.status)}">${esc(p.status)}</span></div>
-        <h2 class="sel-nome">${esc(p.nome)}</h2>
-        <p class="sel-tipo">${esc(p.tipo)}</p>
-        ${p.specs ? `<dl class="sel-specs">${p.specs.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>` : ""}
-        <p>${esc(p.resumo)}</p>
-        ${p.marcos.length ? `<ul class="sel-marcos">${p.marcos.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
-        <div class="sel-acoes">
-          ${p.video ? `<button class="btn btn-ghost" data-video="${esc(p.video)}" data-titulo="${esc(p.nome)}">${ic("play")} Assistir ao lançamento</button>` : ""}
-          ${p.id === "hemera-v1" ? `<a class="btn btn-red" href="${esc(SITE.doacao.url)}" target="_blank" rel="noopener">${ic("heart")} Ajude a reconstruir</a>` : ""}
-        </div>
-      </div>
-      <div class="sel-view">
-        <div class="sel-plat"></div>
-        ${palco(p)}
-        <button class="sel-nav prev" aria-label="Projeto anterior">${ic("arrow")}</button>
-        <button class="sel-nav next" aria-label="Próximo projeto">${ic("arrow")}</button>
-        <span class="sel-count">${String(i + 1).padStart(2, "0")} / ${String(lista.length).padStart(2, "0")}</span>
+    const specs = p.specs || [["Equipe", nomeEquipe(p.equipe)], ["Período", p.periodo], ["Status", p.status], ["Tipo", p.tipo]];
+    const premio = CONQUISTAS.find(x => x.ano === p.ano && (x.equipe === p.equipe) && /lugar|Campe|Prêmio|Excelência/i.test(x.txt) && (x.txt.includes(p.nome.split(" ")[0]) || /LASC|Spaceport|CubeDesign|OBSAT|COBRUF/.test(x.txt)));
+    $("crt").className = `crt ${c}`;
+    $("crt-info").innerHTML = `
+      <div class="crt-head"><h2>${esc(p.nome)}</h2><span>${esc(String(anoTxt(p)))}</span></div>
+      <div class="crt-specs">${specs.map(([k, v]) => `<div><small>${esc(k)}</small><b>${esc(v)}</b></div>`).join("")}</div>
+      <p class="crt-desc">${esc(p.resumo)}</p>
+      ${premio ? `<p class="crt-premio">${ic("star")}<span>${esc(premio.txt)}</span></p>` : ""}
+      <div class="crt-acoes">
+        ${p.video ? `<button class="btn btn-ghost" data-video="${esc(p.video)}" data-titulo="${esc(p.nome)}">${ic("play")} Assistir ao lançamento</button>` : ""}
+        ${p.id === "hemera-v1" ? `<a class="btn btn-red" href="${esc(SITE.doacao.url)}" target="_blank" rel="noopener">${ic("heart")} Ajude a reconstruir</a>` : ""}
       </div>`;
-    $("sel-stage").querySelector(".prev").onclick = () => mostra(lista, lista[(i - 1 + lista.length) % lista.length].id);
-    $("sel-stage").querySelector(".next").onclick = () => mostra(lista, lista[(i + 1) % lista.length].id);
-    $("roster").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.id === p.id));
-    $("roster").querySelector(".on")?.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+    $("crt-track").querySelectorAll(".crt-item").forEach((el, k) => {
+      const on = k === i; el.classList.toggle("on", on); el.classList.toggle("depois", k > i); el.classList.toggle("antes", k < i);
+      const v = el.querySelector(".crt-vis");
+      if (on && p.modelo && !v.querySelector("model-viewer")) v.innerHTML = visual(lista[k], true);
+      if (!on && v.querySelector("model-viewer")) v.innerHTML = visual(lista[k], false);
+    });
+    const it = $("crt-track").children[i];
+    const alvo = $("crt-line").clientWidth * (innerWidth < 900 ? .5 : .32);
+    $("crt-track").style.transform = `translateX(${alvo - it.offsetLeft - it.offsetWidth / 2}px)`;
+    $("crt-nome").textContent = p.nome;
+    $("crt-anos").innerHTML = lista.slice(i, i + 4).map((q, k) => `<button class="${k === 0 ? "on" : ""}" data-id="${q.id}">${esc(String(anoTxt(q)))}</button>`).join("");
+    $("crt-prev").disabled = i === 0; $("crt-next").disabled = i === lista.length - 1;
+    $("crt-prev").onclick = () => i > 0 && mostra(lista, lista[i - 1].id);
+    $("crt-next").onclick = () => i < lista.length - 1 && mostra(lista, lista[i + 1].id);
+    $("crt-extra").innerHTML = `
+      <div class="crt-foto"><img class="${p.contain ? "contain" : ""}" src="${esc(p.imagem)}" alt="${esc(p.nome)}" loading="lazy"></div>
+      <div><span class="eyebrow">${esc(nomeEquipe(p.equipe))} · ${esc(p.tipo)}</span><h3 class="crt-sub">Marcos do ${esc(p.nome)}</h3>
+        ${p.marcos.length ? `<ol class="crt-marcos">${p.marcos.map(x => `<li>${esc(x)}</li>`).join("")}</ol>` : `<p class="mut">Ainda sem marcos registrados.</p>`}</div>`;
   };
 
   const desenha = () => {
@@ -319,21 +348,22 @@ function projetos() {
     $("times").innerHTML = [["todas", "Todas", ""], ["rockets", "Rockets", "r"], ["sats", "Sats", "b"]].map(([v, t, c]) => `<button class="chip ${c} ${v === time ? "on" : ""}" data-t="${v}">${t}</button>`).join("");
     const lista = filtrados();
     $("conquistas").innerHTML = linhaDoTempo(CONQUISTAS.filter(c => (ano === "todos" || String(c.ano) === ano) && (time === "todas" || c.equipe === time || c.equipe === "geral")));
-    if (!lista.length) { $("roster").innerHTML = ""; $("sel-stage").className = "sel-stage"; $("sel-stage").innerHTML = `<div class="notice">Nenhum projeto com esse filtro.</div>`; revelar(); return; }
-    $("roster").innerHTML = lista.map(p => `<button class="${corEquipe(p.equipe)}" data-id="${p.id}" title="${esc(p.nome)}">
-      <span class="ri"><img src="${esc(p.imagem)}" alt="" loading="lazy" style="${p.contain ? "object-fit:contain" : ""}">${p.modelo ? `<i class="r3d">3D</i>` : ""}</span>
-      <b>${esc(p.nome)}</b><small>${esc(p.periodo)}</small></button>`).join("");
+    if (!lista.length) { $("crt").style.display = "none"; $("crt-extra").innerHTML = `<div class="notice">Nenhum projeto com esse filtro.</div>`; revelar(); return; }
+    $("crt").style.display = "";
+    $("crt-track").innerHTML = lista.map(p => `<button class="crt-item ${corEquipe(p.equipe)} ${(p.perfil?.tipo || (p.equipe === "sats" ? "cubesat" : "")) === "cubesat" ? "sat" : ""}" data-id="${p.id}" style="--h:${altura(p)}" aria-label="${esc(p.nome)}">
+      <span class="crt-vis">${visual(p, false)}</span>${p.modelo ? `<i class="r3d">3D</i>` : ""}<span class="crt-lbl">${esc(p.nome)}</span></button>`).join("");
     mostra(lista, lista.some(p => p.id === atual) ? atual : lista[0].id);
     revelar();
   };
 
-  $("roster").onclick = e => { const b = e.target.closest("button"); if (b) mostra(filtrados(), b.dataset.id); };
+  $("crt-track").onclick = e => { const b = e.target.closest(".crt-item"); if (b) mostra(filtrados(), b.dataset.id); };
+  $("crt-anos").onclick = e => { const b = e.target.closest("button"); if (b) mostra(filtrados(), b.dataset.id); };
   document.addEventListener("keydown", e => {
     if (e.target.closest("input, textarea, model-viewer") || !["ArrowLeft", "ArrowRight"].includes(e.key)) return;
-    const l = filtrados(); if (!l.length) return;
-    const i = l.findIndex(p => p.id === atual);
-    mostra(l, l[(i + (e.key === "ArrowRight" ? 1 : -1) + l.length) % l.length].id);
+    const l = filtrados(), i = l.findIndex(p => p.id === atual), j = i + (e.key === "ArrowRight" ? 1 : -1);
+    if (l[j]) mostra(l, l[j].id);
   });
+  addEventListener("resize", () => { const l = filtrados(); if (l.length) mostra(l, atual); });
   $("anos").onclick = e => { const b = e.target.closest(".chip"); if (!b) return; ano = b.dataset.a; setParam("ano", ano === "todos" ? "" : ano); desenha(); };
   $("times").onclick = e => { const b = e.target.closest(".chip"); if (!b) return; time = b.dataset.t; setParam("equipe", time === "todas" ? "" : time); desenha(); };
   desenha();
@@ -354,6 +384,9 @@ function noticias() {
   $("lista").innerHTML = POSTS.map(cardNoticia).join("");
   $("videos").innerHTML = videosHTML(VIDEOS);
   $("redes").innerHTML = redesHTML();
+  $("imprensa").innerHTML = IMPRENSA.map(m => `<a class="imp reveal" href="${esc(m.url)}" target="_blank" rel="noopener">
+    <span class="imp-v">${esc(m.veiculo)}</span><span class="imp-d">${esc(m.data)}</span><b>${esc(m.titulo)}</b><p>${esc(m.resumo)}</p>
+    <span class="imp-l">${ic("ext")} ${esc(m.tipo)}</span></a>`).join("");
 }
 
 function post() {
