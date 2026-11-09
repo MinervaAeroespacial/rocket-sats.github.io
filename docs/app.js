@@ -355,33 +355,10 @@ function projetos() {
   const ehSat = p => (p.perfil?.tipo || (p.equipe === "sats" ? "cubesat" : "")) === "cubesat";
   const semMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* o veículo que estava em destaque decola (foguete) ou se afasta flutuando (satélite) */
-  const decola = (q, el) => {
-    if (semMovimento || !el) return;
-    const line = $("crt-line"), lr = line.getBoundingClientRect();
-    const vis = el.querySelector(".crt-vis"), vr = vis.getBoundingClientRect();
-    const arte = q.recorte ? `<img src="${esc(q.recorte)}" alt="">` : silhueta(q);
-    const box = vr;
-    const s = document.createElement("div");
-    s.className = "crt-decola" + (ehSat(q) ? " sat" : "");
-    s.style.cssText = `left:${box.left - lr.left}px;top:${box.top - lr.top}px;width:${box.width}px;height:${box.height}px`;
-    s.innerHTML = `<div class="crt-decola-v">${arte}</div>${ehSat(q) ? "" : `<span class="jato"></span><span class="rastro"></span>`}`;
-    line.appendChild(s);
-    el.classList.add("partiu");
-    if (!ehSat(q)) { $("crt-smoke").classList.remove("burst"); void $("crt-smoke").offsetWidth; $("crt-smoke").classList.add("burst"); }
-    const anim = ehSat(q)
-      ? s.animate([{ transform: "translate(0,0) rotate(0)", opacity: 1 }, { transform: "translate(120px,-560px) rotate(25deg)", opacity: 0 }], { duration: 1400, easing: "ease-in" })
-      : s.animate([{ transform: "translateY(0)" }, { transform: "translate(-2px,2px)", offset: .08 }, { transform: "translate(2px,0)", offset: .16 }, { transform: "translateY(-6px)", offset: .24 }, { transform: "translateY(-900px)" }], { duration: 1300, easing: "cubic-bezier(.5,0,.75,.35)" });
-    anim.onfinish = () => { s.remove(); el.classList.remove("partiu"); };
-  };
-
   const mostra = (lista, id) => {
     const i = Math.max(0, lista.findIndex(p => p.id === id));
     const p = lista[i];
-    if (atual && atual !== p.id && $("crt-track").querySelector(".crt-item.on")) {
-      const q = PROJETOS.find(x => x.id === atual), el = $("crt-track").querySelector(".crt-item.on");
-      if (q && el && el.dataset.id === q.id) { decola(q, el); var chegando = !semMovimento; }
-    }
+    const trocou = atual && atual !== p.id;
     atual = p.id;
     history.replaceState(null, "", location.pathname + location.search + "#" + p.id);
     const c = corEquipe(p.equipe);
@@ -411,11 +388,7 @@ function projetos() {
       m3.classList.toggle("sat", (p.perfil?.tipo || (p.equipe === "sats" ? "cubesat" : "")) === "cubesat");
       m3.hidden = false;
     } else { m3.hidden = true; m3.innerHTML = ""; m3.dataset.src = ""; }
-    if (typeof chegando !== "undefined" && chegando) {
-      const novos = [$("crt-track").children[i], $("crt-3d")];
-      novos.forEach(n => n && n.classList.add("chegando"));
-      setTimeout(() => novos.forEach(n => n && n.classList.remove("chegando")), 950);
-    }
+    if (trocou && !ehSat(p) && !semMovimento) { const sm = $("crt-smoke"); sm.classList.remove("burst"); void sm.offsetWidth; sm.classList.add("burst"); clearTimeout(sm._t); sm._t = setTimeout(() => sm.classList.remove("burst"), 1700); }
     const it = $("crt-track").children[i];
     const alvo = $("crt-line").clientWidth * (innerWidth < 900 ? .5 : .32);
     $("crt-track").style.transform = `translateX(${alvo - it.offsetLeft - it.offsetWidth / 2}px)`;

@@ -462,18 +462,8 @@ a.card:hover{border-color:#3a4157;transform:translateY(-3px)}
 @keyframes fumaca{0%{transform:translate(0,0) scale(.25);opacity:0}15%{opacity:.85}100%{transform:translate(var(--x),-60px) scale(calc(var(--s) * 2.4));opacity:0}}
 .crt-smoke.burst i{animation:fumacaForte 1.6s ease-out 1 both;animation-delay:calc(var(--d) / 8)}
 @keyframes fumacaForte{0%{transform:translate(0,0) scale(.4);opacity:.95}100%{transform:translate(calc(var(--x) * 2.2),-30px) scale(calc(var(--s) * 4));opacity:0}}
-/* decolagem */
-.crt-item.partiu{opacity:0 !important;transition:none}
-.crt-decola{position:absolute;z-index:4;pointer-events:none}
-.crt-decola-v,.crt-decola-v svg,.crt-decola-v img{width:100%;height:100%;display:block;object-fit:contain;object-position:bottom}
-.crt-decola .jato{position:absolute;left:50%;top:96%;width:40%;min-width:22px;height:30%;transform:translateX(-50%);border-radius:40% 40% 50% 50%;
-  background:radial-gradient(ellipse at 50% 10%,rgba(255,255,255,.95),rgba(225,230,238,.7) 40%,rgba(200,205,215,0) 75%);filter:blur(3px);animation:jato .12s linear infinite alternate}
-.crt-decola .rastro{position:absolute;left:50%;top:110%;width:70%;min-width:36px;height:300%;transform:translateX(-50%);
-  background:linear-gradient(180deg,rgba(240,242,248,.85),rgba(210,215,225,.45) 35%,rgba(200,205,215,.15) 70%,transparent);filter:blur(12px);border-radius:45%}
-@keyframes jato{from{transform:translateX(-50%) scale(.9,.85)}to{transform:translateX(-50%) scale(1.1,1.15)}}
 @media (max-width:900px){.crt-smoke{left:50%}}
 @media (prefers-reduced-motion:reduce){.crt-smoke{display:none}}
-.crt-item.chegando,.crt-3d.chegando{opacity:0 !important}
 .crt-item.on,.crt-3d{transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s,filter .4s}
 
 /* ---------- ANATOMIA DO PROJETO ---------- */
