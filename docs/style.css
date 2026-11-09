@@ -373,10 +373,17 @@ a.card:hover{border-color:#3a4157;transform:translateY(-3px)}
 .crt-item.sat{width:96px}
 .crt-vis{display:block;width:100%;height:100%}
 .crt-vis svg,.crt-vis img{width:100%;height:100%;object-fit:contain;object-position:bottom;display:block}
-.crt-item.on .crt-vis model-viewer{position:absolute;left:50%;bottom:0;width:180px;height:100%;transform:translateX(-50%);background:transparent}
+.crt-item.tem3d .crt-vis{visibility:hidden}
+.crt-3d{position:absolute;left:32%;top:0;bottom:24px;width:260px;margin-left:-130px;z-index:2;animation:selIn .5s ease both}
+.crt-3d[hidden]{display:none}
+.crt-3d model-viewer{width:100%;height:100%;background:transparent;--poster-color:transparent}
+.crt-3d.sat{bottom:70px;height:auto}
+.crt-3d.sat model-viewer{animation:flutua 5.5s ease-in-out infinite}
+.crt-head span.txt{font-size:1.1rem;font-weight:500;color:#aeb5c3}
 .crt-lbl{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:6px;font-size:.7rem;white-space:nowrap;color:#9aa3b5;text-transform:uppercase;letter-spacing:.06em}
 .crt-item.on .crt-lbl{display:none}
-.crt-item .r3d{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.62rem;font-weight:700;padding:1px 5px;border-radius:5px;border:1px solid rgba(255,255,255,.4);background:#0009}
+.crt-item .r3d{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.62rem;font-weight:700;line-height:1.4;padding:1px 6px;border-radius:5px;border:1px solid rgba(255,255,255,.45);background:#0009;color:#fff;letter-spacing:.05em}
+.crt-item.on .r3d{display:none}
 .crt-nav{position:absolute;top:44%;z-index:3;width:44px;height:44px;border-radius:50%;border:0;background:transparent;color:#fff;cursor:pointer;display:grid;place-items:center}
 .crt-nav:disabled{opacity:.15;cursor:default}
 .crt-nav:not(:disabled):hover{background:rgba(255,255,255,.08)}
@@ -410,7 +417,7 @@ a.card:hover{border-color:#3a4157;transform:translateY(-3px)}
   .crt-stage{order:-1}
   .crt-line{min-height:380px}
   .crt-item{height:calc(var(--h) * 170px)}
-  .crt-spot,.crt-floor{left:50%}
+  .crt-spot,.crt-floor,.crt-3d{left:50%}
   .crt-cap{padding-left:0;display:flex;flex-direction:column;align-items:center}
   .crt-anos{justify-content:center}
   .crt-anos button:not(.on){display:none}

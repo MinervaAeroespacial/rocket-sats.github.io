@@ -298,7 +298,7 @@ const MEMBROS = {
                       { tipo: "cubesat", u: 1|2|3, alt } para satélites
    recorte (opcional): imagem PNG com fundo transparente do veículo em pé, substitui o desenho */
 const PROJETOS = [
-  { id: "hemera-v1", perfil: { alt: 1, larg: 1.15 }, nome: "Hemera v.1", equipe: "rockets", ano: 2026, periodo: "2026", status: "Em reconstrução", destaque: true,
+  { id: "hemera-v1", perfil: { alt: 1, larg: 1.15 }, modelo: "img/3d/hemera-v1.glb", nome: "Hemera v.1", equipe: "rockets", ano: 2026, periodo: "2026", status: "Em reconstrução", destaque: true,
     tipo: "Foguete de sondagem · SRAD sólido 3 km", imagem: "img/fotos/lancamento-lasc-2026.webp",
     specs: [["Diâmetro", "174 mm"], ["Motor", "Notus v.1 (classe N)"], ["Impulso total", "10,8 kN·s"], ["Apogeu (LASC 2026)", "3.339 m"]],
     resumo: "Foguete de sondagem com fuselagem modular de compósito de 174 mm, impulsionado pelo Notus v.1, um motor sólido SRAD classe N. Leva a bordo um CubeSat 2U que valida a eletrônica do Hemera v.2. Voou duas vezes em 2026. Na segunda, o paraquedas não abriu e o foguete se perdeu. A equipe recuperou o que restou e agora trabalha para reconstruí-lo.",
@@ -307,7 +307,7 @@ const PROJETOS = [
     tipo: "Satélite · missão orbital", imagem: "img/fotos/terra.webp",
     resumo: "Missão para levar ao espaço o primeiro satélite inteiramente carioca. A plataforma atingiu TRL 5 em 2025. A meta de 2026 é o TRL 6: qualificá-la em ambiente relevante, com mitigação de falhas por radiação ionizante, resistência a ciclos térmicos extremos e qualificação a vibração e choque de lançadores.",
     marcos: ["2025 — TRL 5 alcançado", "2026 — meta: TRL 6 e preparação para lançamento orbital"] },
-  { id: "hemera-v2", perfil: { alt: 1.3, larg: 1.15, estagios: 2 }, nome: "Hemera v.2", equipe: "rockets", ano: null, periodo: "Próximos ciclos", status: "Futuro",
+  { id: "hemera-v2", perfil: { alt: 1.3, larg: 1.15, estagios: 2 }, modelo: "img/3d/hemera-v2.glb", nome: "Hemera v.2", equipe: "rockets", ano: null, periodo: "Próximos ciclos", status: "Futuro",
     tipo: "Foguete de dois estágios", imagem: "img/hemera/hemera-v1.webp", contain: true,
     resumo: "Veículo de dois estágios propulsionados em que o Hemera v.1 será o estágio superior (sustainer). A eletrônica do v.2 já voou no CubeSat 2U do Hemera v.1. O projeto está sendo desenvolvido para ser o primeiro foguete universitário de dois estágios propulsionados da América Latina, com meta de 10 km de altitude.",
     marcos: ["Eletrônica validada em voo a bordo do Hemera v.1"] },

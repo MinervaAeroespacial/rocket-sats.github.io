@@ -301,7 +301,7 @@ function projetos() {
 
   const visual = (p, sel) => {
     if (sel && p.modelo) { carregarModelViewer();
-      return `<model-viewer src="${esc(p.modelo)}" alt="Modelo 3D do ${esc(p.nome)}" camera-controls auto-rotate rotation-per-second="18deg" interaction-prompt="none" shadow-intensity="1" ${p.orbita ? `camera-orbit="${esc(p.orbita)}"` : ""}></model-viewer>`; }
+      return `<model-viewer src="${esc(p.modelo)}" alt="Modelo 3D do ${esc(p.nome)}" camera-controls auto-rotate rotation-per-second="20deg" interaction-prompt="none" environment-image="neutral" exposure="1" shadow-intensity="1" camera-orbit="${esc(p.orbita || "0deg 90deg auto")}" field-of-view="${esc(p.fov || "auto")}" disable-zoom></model-viewer>`; }
     if (p.recorte) return `<img src="${esc(p.recorte)}" alt="${esc(p.nome)}">`;
     return silhueta(p);
   };
@@ -315,7 +315,7 @@ function projetos() {
     const premio = CONQUISTAS.find(x => x.ano === p.ano && (x.equipe === p.equipe) && /lugar|Campe|Prêmio|Excelência/i.test(x.txt) && (x.txt.includes(p.nome.split(" ")[0]) || /LASC|Spaceport|CubeDesign|OBSAT|COBRUF/.test(x.txt)));
     $("crt").className = `crt ${c}`;
     $("crt-info").innerHTML = `
-      <div class="crt-head"><h2>${esc(p.nome)}</h2><span>${esc(String(anoTxt(p)))}</span></div>
+      <div class="crt-head"><h2>${esc(p.nome)}</h2><span class="${p.ano ? "" : "txt"}">${esc(String(anoTxt(p)))}</span></div>
       <div class="crt-specs">${specs.map(([k, v]) => `<div><small>${esc(k)}</small><b>${esc(v)}</b></div>`).join("")}</div>
       <p class="crt-desc">${esc(p.resumo)}</p>
       ${premio ? `<p class="crt-premio">${ic("star")}<span>${esc(premio.txt)}</span></p>` : ""}
@@ -326,9 +326,14 @@ function projetos() {
     $("crt-track").querySelectorAll(".crt-item").forEach((el, k) => {
       const on = k === i; el.classList.toggle("on", on); el.classList.toggle("depois", k > i); el.classList.toggle("antes", k < i);
       const v = el.querySelector(".crt-vis");
-      if (on && p.modelo && !v.querySelector("model-viewer")) v.innerHTML = visual(lista[k], true);
-      if (!on && v.querySelector("model-viewer")) v.innerHTML = visual(lista[k], false);
+      el.classList.toggle("tem3d", on && !!p.modelo);
     });
+    const m3 = $("crt-3d");
+    if (p.modelo) {
+      if (m3.dataset.src !== p.modelo) { m3.dataset.src = p.modelo; m3.innerHTML = visual(p, true); }
+      m3.classList.toggle("sat", (p.perfil?.tipo || (p.equipe === "sats" ? "cubesat" : "")) === "cubesat");
+      m3.hidden = false;
+    } else { m3.hidden = true; m3.innerHTML = ""; m3.dataset.src = ""; }
     const it = $("crt-track").children[i];
     const alvo = $("crt-line").clientWidth * (innerWidth < 900 ? .5 : .32);
     $("crt-track").style.transform = `translateX(${alvo - it.offsetLeft - it.offsetWidth / 2}px)`;
