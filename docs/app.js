@@ -311,6 +311,23 @@ function peca(forma, cor) {
   return `<svg viewBox="0 0 ${W} ${d[0]}" preserveAspectRatio="none" aria-hidden="true">${d[1].replace(/stroke="/g, 'vector-effect="non-scaling-stroke" stroke="')}</svg>`;
 }
 
+/* visualizador 3D que gira em 360° nos dois eixos */
+const mv360 = (src, nome, extra = "") => `<model-viewer src="${esc(src)}" alt="Modelo 3D: ${esc(nome)}" camera-controls auto-rotate auto-rotate-delay="1500" rotation-per-second="22deg"
+  interaction-prompt="none" environment-image="neutral" exposure="1.05" shadow-intensity="0.6" loading="lazy"
+  camera-orbit="30deg 70deg auto" min-camera-orbit="-Infinity 0deg auto" max-camera-orbit="Infinity 180deg auto" min-field-of-view="6deg" ${extra}></model-viewer>`;
+
+function abreModelo(src, titulo) {
+  let m = document.getElementById("dec-modal");
+  if (!m) { m = document.createElement("div"); m.id = "dec-modal"; m.className = "dec-modal"; document.body.appendChild(m);
+    m.addEventListener("click", e => { if (e.target === m || e.target.closest(".dec-fecha")) fecha(); }); }
+  const fecha = () => { m.classList.remove("on"); m.innerHTML = ""; document.removeEventListener("keydown", esc_); };
+  const esc_ = e => { if (e.key === "Escape") fecha(); };
+  document.addEventListener("keydown", esc_);
+  m.innerHTML = `<div class="dec-modal-c"><div class="dec-modal-h"><b>${esc(titulo)}</b><button type="button" class="dec-fecha" aria-label="Fechar">${ic("x")}</button></div>
+    ${mv360(src, titulo, 'touch-action="none"')}<p>Arraste em qualquer direção para girar em 360° · role ou pince para ampliar · botão direito ou dois dedos para mover</p></div>`;
+  m.classList.add("on");
+}
+
 function anatomia(p) {
   const lista = SECOES[p.id];
   const cor = p.equipe === "sats" ? "#2b7be4" : "#e8312f";
@@ -322,9 +339,17 @@ function anatomia(p) {
     return;
   }
   $("dec-sub").textContent = "Cada seção do veículo e o subsistema responsável por ela. Passe o mouse ou toque para destacar.";
-  $("dec-fig").className = `dec-fig ${p.equipe === "sats" ? "sat" : ""}`;
-  $("dec-fig").innerHTML = lista.map((s, k) => `<button type="button" class="dec-peca" data-k="${k}" style="--t:${s.tam || 1}">
+  const tem3d = lista.some(s => s.modelo);
+  if (tem3d) carregarModelViewer();
+  $("dec-fig").className = `dec-fig ${p.equipe === "sats" ? "sat" : ""} ${tem3d ? "d3" : ""}`;
+  $("dec-fig").closest(".dec-esq").classList.toggle("solta", tem3d);
+  $("dec-fig").innerHTML = lista.map((s, k) => s.modelo
+    ? `<div class="dec-peca dec-3d" data-k="${k}">
+        <span class="dec-mv">${mv360(s.modelo, s.secao)}<button type="button" class="dec-amp" data-amp="${k}" title="Ampliar">${ic("expand")}</button></span>
+        <span class="dec-rot"><b>${String(k + 1).padStart(2, "0")}</b>${esc(s.secao)}</span></div>`
+    : `<button type="button" class="dec-peca" data-k="${k}" style="--t:${s.tam || 1}">
       <span class="dec-svg">${peca(s.forma, cor)}</span><span class="dec-rot"><b>${String(k + 1).padStart(2, "0")}</b>${esc(s.secao)}</span></button>`).join("");
+  if (tem3d) $("dec-sub").textContent = "Cada seção em 3D: arraste para girar em 360° (para os lados e de cima para baixo) e role para aproximar. Use o botão de ampliar para ver em tela cheia.";
   $("dec-lista").innerHTML = `<div class="timeline dec-tl">${lista.map((s, k) => `<div class="tl-year dec-item" data-k="${k}">
       <h3>${esc(s.subsistema)}</h3><p class="dec-sec">${String(k + 1).padStart(2, "0")} · ${esc(s.secao)}</p>
       ${s.tarefas.map(t => `<div class="tl-item"><span class="dot ${corEquipe(p.equipe)}"></span><span>${esc(t)}</span></div>`).join("")}</div>`).join("")}</div>`;
@@ -333,7 +358,11 @@ function anatomia(p) {
     c.onmouseover = e => { const t = e.target.closest("[data-k]"); if (t) marca(t.dataset.k); };
     c.onmouseleave = () => marca(-1);
   });
-  $("dec-fig").onclick = e => { const t = e.target.closest("[data-k]"); if (!t) return; marca(t.dataset.k);
+  $("dec-fig").onclick = e => {
+    const amp = e.target.closest("[data-amp]");
+    if (amp) { const s = lista[amp.dataset.amp]; abreModelo(s.modelo, `${p.nome} · ${s.secao}`); return; }
+    if (e.target.closest("model-viewer")) return;
+    const t = e.target.closest("[data-k]"); if (!t) return; marca(t.dataset.k);
     document.querySelector(`.dec-item[data-k="${t.dataset.k}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" }); };
 }
 

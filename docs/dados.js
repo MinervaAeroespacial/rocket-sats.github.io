@@ -364,36 +364,37 @@ const PROJETOS = [
    secao: nome da parte · subsistema: quem cuida dela · tarefas: o que foi desenvolvido
    forma (desenho): foguete → "coifa" | "modulo" | "interestagio" | "aletas" | "boattail"
                     satélite → "antena" | "placa" | "estrutura" | "carga" | "painel"
-   tam: altura relativa do desenho (1 = padrão) */
+   tam: altura relativa do desenho (1 = padrão)
+   modelo (opcional): arquivo 3D .glb da seção — substitui o desenho e pode ser girado em 360° */
 const SECOES = {
   "hemera-v1": [
-    { secao: "Coifa", subsistema: "Aeroestruturas · Eletrônica", forma: "coifa", tam: 1.6, tarefas: [
+    { secao: "Coifa", modelo: "img/3d/hemera-v1/coifa.glb", subsistema: "Aeroestruturas · Eletrônica", forma: "coifa", tam: 1.6, tarefas: [
       "Coifa Von Kármán em compósito, com placa fixa de fechamento",
       "Ponta com insertos macho e fêmea usinados",
       "Placas de lastro retangular e redonda para ajuste do centro de massa",
       "Tubo de Pitot com tubos estático e dinâmico e transdutor de pressão" ] },
-    { secao: "Módulo de Recuperação", subsistema: "Recuperação", forma: "modulo", tam: 1.2, tarefas: [
+    { secao: "Módulo de Recuperação", modelo: "img/3d/hemera-v1/recuperacao.glb", subsistema: "Recuperação", forma: "modulo", tam: 1.2, tarefas: [
       "Ejeção pneumática por CO₂ no apogeu",
       "Paraquedas principal com skirt reefing",
       "Line cutters que abrem o paraquedas por completo a 500 m",
       "Célula de carga que mede o choque de abertura" ] },
-    { secao: "Módulo de Carga Útil", subsistema: "Minerva Sats · Aeroestruturas", forma: "modulo", tam: .9, tarefas: [
+    { secao: "Módulo de Carga Útil", modelo: "img/3d/hemera-v1/carga-util.glb", subsistema: "Minerva Sats · Aeroestruturas", forma: "modulo", tam: .9, tarefas: [
       "CubeSat 2U que valida em voo a eletrônica do Hemera v.2",
       "Nova fuselagem do módulo de carga útil e placa fixa de montagem" ] },
-    { secao: "Módulo de Aviônica", subsistema: "Eletrônica", forma: "modulo", tam: 1, tarefas: [
+    { secao: "Módulo de Aviônica", modelo: "img/3d/hemera-v1/avionica.glb", subsistema: "Eletrônica", forma: "modulo", tam: 1, tarefas: [
       "Aviônica modular com computadores de recuperação redundantes (RRC3 e Blue Raven)",
       "Rastreamento por GPS Featherweight e antena integrada à aleta (fintenna)",
       "Suportes para câmeras frontal e lateral",
       "Aquisição de dados de voo e suporte de solo" ] },
-    { secao: "Acopladores", subsistema: "Aeroestruturas", forma: "interestagio", tam: .35, tarefas: [
+    { secao: "Acopladores", modelo: "img/3d/hemera-v1/acopladores.glb", subsistema: "Aeroestruturas", forma: "interestagio", tam: .35, tarefas: [
       "Acopladores universais macho e fêmea usinados em alumínio 6101-T6",
       "Fuselagem modular em compósito de fibra de vidro e epóxi, com 174 mm de diâmetro" ] },
-    { secao: "Módulo de Propulsão", subsistema: "Propulsão", forma: "modulo", tam: 1.5, tarefas: [
+    { secao: "Módulo de Propulsão", modelo: "img/3d/hemera-v1/propulsao.glb", subsistema: "Propulsão", forma: "modulo", tam: 1.5, tarefas: [
       "Motor sólido SRAD Notus v.1, classe N, com 9,5 kg de propelente KNSB",
       "Grãos de 45 e 50 mm com inibidor, anel retentor e anéis de vedação",
       "Impulso total de 10,8 kN·s a 5,8 MPa de pressão de operação",
       "Anel centralizador e placa de propulsão" ] },
-    { secao: "Aletas e Boat Tail", subsistema: "Aeroestruturas", forma: "aletas", tam: 1, tarefas: [
+    { secao: "Aletas e Boat Tail", modelo: "img/3d/hemera-v1/aletas.glb", subsistema: "Aeroestruturas", forma: "aletas", tam: 1, tarefas: [
       "Aletas enflechadas com revestimento de fibra de carbono",
       "Fuselagem inferior de propulsão e boat tail para reduzir o arrasto",
       "Análise estrutural e de desempenho de voo" ] },
