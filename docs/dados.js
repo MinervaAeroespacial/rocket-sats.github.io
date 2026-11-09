@@ -359,6 +359,108 @@ const PROJETOS = [
     marcos: ["2020 — 2º lugar em 3 km Hybrid Rocket Motors na LASC", "Dez. 2020 — aprovado no edital de apoio a grupos de foguetes acadêmicos da FUNCATE/AEB (programa E2T), com R$ 20 mil", "2021 — apresentado na LASC 2021"] },
 ];
 
+/* ---------- ANATOMIA DOS PROJETOS (página Projetos) ----------
+   Cada projeto pode ser dividido em seções, de cima para baixo.
+   secao: nome da parte · subsistema: quem cuida dela · tarefas: o que foi desenvolvido
+   forma (desenho): foguete → "coifa" | "modulo" | "interestagio" | "aletas" | "boattail"
+                    satélite → "antena" | "placa" | "estrutura" | "carga" | "painel"
+   tam: altura relativa do desenho (1 = padrão) */
+const SECOES = {
+  "hemera-v1": [
+    { secao: "Coifa", subsistema: "Aeroestruturas · Eletrônica", forma: "coifa", tam: 1.6, tarefas: [
+      "Coifa Von Kármán em compósito, com placa fixa de fechamento",
+      "Ponta com insertos macho e fêmea usinados",
+      "Placas de lastro retangular e redonda para ajuste do centro de massa",
+      "Tubo de Pitot com tubos estático e dinâmico e transdutor de pressão" ] },
+    { secao: "Módulo de Recuperação", subsistema: "Recuperação", forma: "modulo", tam: 1.2, tarefas: [
+      "Ejeção pneumática por CO₂ no apogeu",
+      "Paraquedas principal com skirt reefing",
+      "Line cutters que abrem o paraquedas por completo a 500 m",
+      "Célula de carga que mede o choque de abertura" ] },
+    { secao: "Módulo de Carga Útil", subsistema: "Minerva Sats · Aeroestruturas", forma: "modulo", tam: .9, tarefas: [
+      "CubeSat 2U que valida em voo a eletrônica do Hemera v.2",
+      "Nova fuselagem do módulo de carga útil e placa fixa de montagem" ] },
+    { secao: "Módulo de Aviônica", subsistema: "Eletrônica", forma: "modulo", tam: 1, tarefas: [
+      "Aviônica modular com computadores de recuperação redundantes (RRC3 e Blue Raven)",
+      "Rastreamento por GPS Featherweight e antena integrada à aleta (fintenna)",
+      "Suportes para câmeras frontal e lateral",
+      "Aquisição de dados de voo e suporte de solo" ] },
+    { secao: "Acopladores", subsistema: "Aeroestruturas", forma: "interestagio", tam: .35, tarefas: [
+      "Acopladores universais macho e fêmea usinados em alumínio 6101-T6",
+      "Fuselagem modular em compósito de fibra de vidro e epóxi, com 174 mm de diâmetro" ] },
+    { secao: "Módulo de Propulsão", subsistema: "Propulsão", forma: "modulo", tam: 1.5, tarefas: [
+      "Motor sólido SRAD Notus v.1, classe N, com 9,5 kg de propelente KNSB",
+      "Grãos de 45 e 50 mm com inibidor, anel retentor e anéis de vedação",
+      "Impulso total de 10,8 kN·s a 5,8 MPa de pressão de operação",
+      "Anel centralizador e placa de propulsão" ] },
+    { secao: "Aletas e Boat Tail", subsistema: "Aeroestruturas", forma: "aletas", tam: 1, tarefas: [
+      "Aletas enflechadas com revestimento de fibra de carbono",
+      "Fuselagem inferior de propulsão e boat tail para reduzir o arrasto",
+      "Análise estrutural e de desempenho de voo" ] },
+  ],
+  "hemera-v2": [
+    { secao: "Estágio superior (sustainer)", subsistema: "Todas as subequipes", forma: "coifa", tam: 1.4, tarefas: [
+      "O Hemera v.1 completo passa a ser o estágio superior",
+      "Coifa, recuperação, carga útil e aviônica herdadas do v.1" ] },
+    { secao: "Propulsão do sustainer", subsistema: "Propulsão", forma: "aletas", tam: 1.2, tarefas: [
+      "Módulo de propulsão superior com motor próprio",
+      "Aletas do estágio superior" ] },
+    { secao: "Interestágio", subsistema: "Aeroestruturas · Recuperação", forma: "interestagio", tam: .45, tarefas: [
+      "União e separação entre os dois estágios" ] },
+    { secao: "Booster", subsistema: "Propulsão · Aeroestruturas", forma: "modulo", tam: 1.6, tarefas: [
+      "Módulo de propulsão do booster e fuselagem própria",
+      "Meta: primeiro foguete universitário de dois estágios propulsionados da América Latina, a 10 km" ] },
+    { secao: "Aletas do booster", subsistema: "Aeroestruturas", forma: "aletas", tam: .9, tarefas: [
+      "Conjunto de aletas do primeiro estágio" ] },
+  ],
+  "aurora": [
+    { secao: "Coifa e carga útil", subsistema: "Aeroestruturas · Minerva Sats", forma: "coifa", tam: 1.5, tarefas: [
+      "Compartimento para CubeSats 2U e 3U",
+      "Experimentos de sensoriamento remoto e de biotecnologia com cianobactérias" ] },
+    { secao: "Estrutura modular", subsistema: "Aeroestruturas", forma: "modulo", tam: 1.4, tarefas: [
+      "Subsistemas independentes, que funcionam e se encaixam separadamente",
+      "Acopladores rosqueados, sem parafusos aparentes, para manter a fuselagem lisa" ] },
+    { secao: "Motor Hélios", subsistema: "Propulsão", forma: "aletas", tam: 1.6, tarefas: [
+      "Motor sólido com mais de um metro de comprimento",
+      "10 kg de propelente e 17 kg carregado",
+      "Apogeu projetado de 3.000 m" ] },
+  ],
+  "chimera": [
+    { secao: "Coifa", subsistema: "Aeroestruturas", forma: "coifa", tam: 1.4, tarefas: [ "Herda o legado de voo da plataforma Aurora" ] },
+    { secao: "Freios aerodinâmicos", subsistema: "Eletrônica · Aeroestruturas", forma: "modulo", tam: 1, tarefas: [ "Freios aerodinâmicos para controlar o apogeu de 3.000 m" ] },
+    { secao: "Motor híbrido", subsistema: "Propulsão", forma: "aletas", tam: 1.6, tarefas: [
+      "Primeiro motor de propulsão híbrida da equipe",
+      "Análise Monte-Carlo da balística interna de motores híbridos" ] },
+  ],
+  "cariocasat": [
+    { secao: "Comunicação", subsistema: "Eletrônica Sats", forma: "antena", tam: .6, tarefas: [ "Enlace de comunicação com a estação de solo" ] },
+    { secao: "Computador de bordo (CDH)", subsistema: "Eletrônica Sats", forma: "placa", tam: .5, tarefas: [
+      "Comando e tratamento de dados",
+      "Mitigação de falhas causadas por radiação ionizante" ] },
+    { secao: "Sistema de energia (EPS)", subsistema: "Eletrônica Sats", forma: "placa", tam: .5, tarefas: [ "Geração, armazenamento e distribuição de energia" ] },
+    { secao: "Carga útil", subsistema: "Eletrônica de Payload", forma: "carga", tam: .8, tarefas: [ "Sensores e experimentos que dão objetivo à missão" ] },
+    { secao: "Estrutura", subsistema: "Mecânica Sats", forma: "estrutura", tam: 1.2, tarefas: [
+      "Estrutura CubeSat e integração dos subsistemas",
+      "Qualificação a vibração e choque de lançadores e a ciclos térmicos extremos",
+      "Plataforma em TRL 5 (2025), com meta de TRL 6" ] },
+  ],
+  "pmm": [
+    { secao: "Comunicação", subsistema: "Eletrônica Sats", forma: "antena", tam: .6, tarefas: [ "Comunicação com o solo" ] },
+    { secao: "Comando e tratamento de dados", subsistema: "Eletrônica Sats", forma: "placa", tam: .5, tarefas: [ "Aquisição de dados e processamento" ] },
+    { secao: "Controle de atitude", subsistema: "Eletrônica Sats", forma: "placa", tam: .5, tarefas: [ "Modelagem do controle de atitude no Simulink e no Matlab" ] },
+    { secao: "Energia e controle térmico", subsistema: "Eletrônica Sats", forma: "placa", tam: .5, tarefas: [ "Alimentação elétrica e controle térmico" ] },
+    { secao: "Slots de carga útil", subsistema: "Experimentos", forma: "carga", tam: .8, tarefas: [ "Qualquer experimento dentro das especificações pode ser integrado" ] },
+    { secao: "Estrutura 1U, 2U e 3U", subsistema: "Mecânica Sats", forma: "estrutura", tam: 1.1, tarefas: [ "Estrutura no padrão CubeSat, em três tamanhos" ] },
+  ],
+  "microbiosat": [
+    { secao: "Plataforma", subsistema: "Eletrônica Sats", forma: "placa", tam: .5, tarefas: [ "Computador de bordo e energia da plataforma multi-missão" ] },
+    { secao: "Experimento de microfluídica", subsistema: "Experimentos", forma: "carga", tam: 1, tarefas: [
+      "Plataforma de microfluídica para cultivo de cianobactérias",
+      "Estudo do crescimento celular sob condições extremas" ] },
+    { secao: "Estrutura", subsistema: "Mecânica Sats", forma: "estrutura", tam: 1.1, tarefas: [ "Estrutura CubeSat 2U para o voo em balão estratosférico" ] },
+  ],
+};
+
 /* ---------- CONQUISTAS ---------- equipe: "rockets" | "sats" | "geral" */
 const CONQUISTAS = [
   { ano: 2026, equipe: "rockets", txt: "Hemera v.1: primeiro voo e recuperação nominais na IREC 2026, no Texas (EUA)" },

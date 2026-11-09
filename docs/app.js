@@ -11,6 +11,8 @@ const P = {
   down: '<path d="M6 9l6 6 6-6"/>',
   menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
   x: '<path d="M18 6L6 18M6 6l12 12"/>',
+  expand: '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
+  refresh: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',
   mail: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/>',
   pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
   insta: '<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/>',
@@ -291,6 +293,50 @@ function silhueta(p) {
   return `<svg viewBox="0 0 60 ${H}" preserveAspectRatio="xMidYMax meet" aria-hidden="true">${st}</svg>`;
 }
 
+/* peça do veículo desenhada para a vista explodida */
+function peca(forma, cor) {
+  const W = 120, b = "#e6e9ef", s = "#b9c0cc";
+  const d = {
+    coifa: [120, `<path d="M60 4 C88 40 92 80 92 116 L28 116 C28 80 32 40 60 4Z" fill="${b}" stroke="${s}"/><rect x="28" y="108" width="64" height="8" fill="${cor}"/>`],
+    modulo: [100, `<rect x="28" y="2" width="64" height="96" fill="${b}" stroke="${s}"/><rect x="28" y="40" width="64" height="14" fill="${cor}"/><rect x="72" y="2" width="20" height="96" fill="#000" opacity=".08"/>`],
+    interestagio: [40, `<rect x="34" y="2" width="52" height="36" fill="#c6ccd6" stroke="${s}"/><rect x="34" y="18" width="52" height="4" fill="${cor}"/>`],
+    aletas: [110, `<rect x="28" y="2" width="64" height="88" fill="${b}" stroke="${s}"/><path d="M28 40 L4 84 L4 98 L28 90Z M92 40 L116 84 L116 98 L92 90Z" fill="${cor}"/><path d="M34 90 L86 90 L80 108 L40 108Z" fill="#9aa3b2"/>`],
+    boattail: [50, `<path d="M28 2 L92 2 L82 48 L38 48Z" fill="${b}" stroke="${s}"/>`],
+    antena: [60, `<rect x="20" y="40" width="80" height="16" rx="2" fill="#c6ccd6" stroke="${s}"/><path d="M40 40 L30 4 M80 40 L90 4" stroke="${cor}" stroke-width="3"/>`],
+    placa: [44, `<rect x="16" y="10" width="88" height="24" rx="2" fill="#1f5f45" stroke="#2f8a63"/><rect x="34" y="16" width="20" height="12" fill="#11161f"/><rect x="62" y="17" width="10" height="10" fill="${cor}"/><circle cx="24" cy="22" r="3" fill="#d4b26a"/><circle cx="96" cy="22" r="3" fill="#d4b26a"/>`],
+    carga: [80, `<rect x="16" y="6" width="88" height="68" rx="3" fill="#d9dee7" stroke="${s}"/><circle cx="60" cy="40" r="18" fill="#11161f"/><circle cx="60" cy="40" r="8" fill="${cor}"/>`],
+    estrutura: [110, `<rect x="16" y="4" width="88" height="102" fill="none" stroke="#aab2c2" stroke-width="6"/><path d="M16 38 H104 M16 72 H104" stroke="#aab2c2" stroke-width="3"/><rect x="0" y="20" width="14" height="70" fill="#1d3f7a" stroke="${cor}"/><rect x="106" y="20" width="14" height="70" fill="#1d3f7a" stroke="${cor}"/>`],
+    painel: [40, `<rect x="4" y="8" width="112" height="24" fill="#1d3f7a" stroke="${cor}"/>`],
+  }[forma] || [90, `<rect x="28" y="2" width="64" height="86" fill="${b}" stroke="${s}"/>`];
+  return `<svg viewBox="0 0 ${W} ${d[0]}" preserveAspectRatio="none" aria-hidden="true">${d[1].replace(/stroke="/g, 'vector-effect="non-scaling-stroke" stroke="')}</svg>`;
+}
+
+function anatomia(p) {
+  const lista = SECOES[p.id];
+  const cor = p.equipe === "sats" ? "#2b7be4" : "#e8312f";
+  $("dec-titulo").textContent = `Por dentro do ${p.nome}`;
+  if (!lista) {
+    $("dec-sub").textContent = "A divisão deste projeto por seções e subsistemas ainda não foi registrada.";
+    $("dec-fig").innerHTML = `<div class="dec-vazio">${silhueta(p)}</div>`;
+    $("dec-lista").innerHTML = `<div class="notice">Para preencher, acrescente o projeto “${esc(p.id)}” em SECOES no arquivo dados.js, com as seções, os subsistemas e as tarefas desenvolvidas.</div>`;
+    return;
+  }
+  $("dec-sub").textContent = "Cada seção do veículo e o subsistema responsável por ela. Passe o mouse ou toque para destacar.";
+  $("dec-fig").className = `dec-fig ${p.equipe === "sats" ? "sat" : ""}`;
+  $("dec-fig").innerHTML = lista.map((s, k) => `<button type="button" class="dec-peca" data-k="${k}" style="--t:${s.tam || 1}">
+      <span class="dec-svg">${peca(s.forma, cor)}</span><span class="dec-rot"><b>${String(k + 1).padStart(2, "0")}</b>${esc(s.secao)}</span></button>`).join("");
+  $("dec-lista").innerHTML = `<div class="timeline dec-tl">${lista.map((s, k) => `<div class="tl-year dec-item" data-k="${k}">
+      <h3>${esc(s.subsistema)}</h3><p class="dec-sec">${String(k + 1).padStart(2, "0")} · ${esc(s.secao)}</p>
+      ${s.tarefas.map(t => `<div class="tl-item"><span class="dot ${corEquipe(p.equipe)}"></span><span>${esc(t)}</span></div>`).join("")}</div>`).join("")}</div>`;
+  const marca = k => document.querySelectorAll(".dec-peca,.dec-item").forEach(e => e.classList.toggle("on", e.dataset.k === String(k)));
+  [$("dec-fig"), $("dec-lista")].forEach(c => {
+    c.onmouseover = e => { const t = e.target.closest("[data-k]"); if (t) marca(t.dataset.k); };
+    c.onmouseleave = () => marca(-1);
+  });
+  $("dec-fig").onclick = e => { const t = e.target.closest("[data-k]"); if (!t) return; marca(t.dataset.k);
+    document.querySelector(`.dec-item[data-k="${t.dataset.k}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" }); };
+}
+
 function projetos() {
   let ano = param("ano") || "todos", time = param("equipe") || "todas";
   let atual = (location.hash || "").slice(1);
@@ -306,14 +352,45 @@ function projetos() {
     return silhueta(p);
   };
 
+  const ehSat = p => (p.perfil?.tipo || (p.equipe === "sats" ? "cubesat" : "")) === "cubesat";
+  const semMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* o veículo que estava em destaque decola (foguete) ou se afasta flutuando (satélite) */
+  const decola = (q, el) => {
+    if (semMovimento || !el) return;
+    const line = $("crt-line"), lr = line.getBoundingClientRect();
+    const vis = el.querySelector(".crt-vis"), vr = vis.getBoundingClientRect();
+    const arte = q.recorte ? `<img src="${esc(q.recorte)}" alt="">` : silhueta(q);
+    const box = vr;
+    const s = document.createElement("div");
+    s.className = "crt-decola" + (ehSat(q) ? " sat" : "");
+    s.style.cssText = `left:${box.left - lr.left}px;top:${box.top - lr.top}px;width:${box.width}px;height:${box.height}px`;
+    s.innerHTML = `<div class="crt-decola-v">${arte}</div>${ehSat(q) ? "" : `<span class="jato"></span><span class="rastro"></span>`}`;
+    line.appendChild(s);
+    el.classList.add("partiu");
+    if (!ehSat(q)) { $("crt-smoke").classList.remove("burst"); void $("crt-smoke").offsetWidth; $("crt-smoke").classList.add("burst"); }
+    const anim = ehSat(q)
+      ? s.animate([{ transform: "translate(0,0) rotate(0)", opacity: 1 }, { transform: "translate(120px,-560px) rotate(25deg)", opacity: 0 }], { duration: 1400, easing: "ease-in" })
+      : s.animate([{ transform: "translateY(0)" }, { transform: "translate(-2px,2px)", offset: .08 }, { transform: "translate(2px,0)", offset: .16 }, { transform: "translateY(-6px)", offset: .24 }, { transform: "translateY(-900px)" }], { duration: 1300, easing: "cubic-bezier(.5,0,.75,.35)" });
+    anim.onfinish = () => { s.remove(); el.classList.remove("partiu"); };
+  };
+
   const mostra = (lista, id) => {
     const i = Math.max(0, lista.findIndex(p => p.id === id));
-    const p = lista[i]; atual = p.id;
+    const p = lista[i];
+    if (atual && atual !== p.id && $("crt-track").querySelector(".crt-item.on")) {
+      const q = PROJETOS.find(x => x.id === atual), el = $("crt-track").querySelector(".crt-item.on");
+      if (q && el && el.dataset.id === q.id) { decola(q, el); var chegando = !semMovimento; }
+    }
+    atual = p.id;
     history.replaceState(null, "", location.pathname + location.search + "#" + p.id);
     const c = corEquipe(p.equipe);
     const specs = p.specs || [["Equipe", nomeEquipe(p.equipe)], ["Período", p.periodo], ["Status", p.status], ["Tipo", p.tipo]];
-    const premio = CONQUISTAS.find(x => x.ano === p.ano && (x.equipe === p.equipe) && /lugar|Campe|Prêmio|Excelência/i.test(x.txt) && (x.txt.includes(p.nome.split(" ")[0]) || /LASC|Spaceport|CubeDesign|OBSAT|COBRUF/.test(x.txt)));
-    $("crt").className = `crt ${c}`;
+    const contexto = (p.resumo + " " + p.marcos.join(" ")).toLowerCase();
+    const comp = t => (t.match(/LASC|Spaceport America Cup|CubeDesign|OBSAT|COBRUF|IREC/) || [""])[0].toLowerCase();
+    const premio = CONQUISTAS.find(x => x.ano === p.ano && x.equipe === p.equipe && /lugar|Campe|Prêmio|Excelência/i.test(x.txt) &&
+      (x.txt.includes(p.nome.split(" ")[0]) || (comp(x.txt) && contexto.includes(comp(x.txt)))));
+    $("crt").className = `crt ${c} ${ehSat(p) ? "" : "foguete"}`;
     $("crt-info").innerHTML = `
       <div class="crt-head"><h2>${esc(p.nome)}</h2><span class="${p.ano ? "" : "txt"}">${esc(String(anoTxt(p)))}</span></div>
       <div class="crt-specs">${specs.map(([k, v]) => `<div><small>${esc(k)}</small><b>${esc(v)}</b></div>`).join("")}</div>
@@ -334,6 +411,11 @@ function projetos() {
       m3.classList.toggle("sat", (p.perfil?.tipo || (p.equipe === "sats" ? "cubesat" : "")) === "cubesat");
       m3.hidden = false;
     } else { m3.hidden = true; m3.innerHTML = ""; m3.dataset.src = ""; }
+    if (typeof chegando !== "undefined" && chegando) {
+      const novos = [$("crt-track").children[i], $("crt-3d")];
+      novos.forEach(n => n && n.classList.add("chegando"));
+      setTimeout(() => novos.forEach(n => n && n.classList.remove("chegando")), 950);
+    }
     const it = $("crt-track").children[i];
     const alvo = $("crt-line").clientWidth * (innerWidth < 900 ? .5 : .32);
     $("crt-track").style.transform = `translateX(${alvo - it.offsetLeft - it.offsetWidth / 2}px)`;
@@ -343,16 +425,35 @@ function projetos() {
     $("crt-prev").onclick = () => i > 0 && mostra(lista, lista[i - 1].id);
     $("crt-next").onclick = () => i < lista.length - 1 && mostra(lista, lista[i + 1].id);
     $("crt-extra").innerHTML = `
-      <div class="crt-foto"><img class="${p.contain ? "contain" : ""}" src="${esc(p.imagem)}" alt="${esc(p.nome)}" loading="lazy"></div>
+      <div class="crt-foto ${p.modelo ? "modo-3d" : ""}" id="crt-foto">
+        ${p.modelo ? `<model-viewer id="crt-mv" src="${esc(p.modelo)}" alt="Modelo 3D do ${esc(p.nome)} para inspecionar de perto" camera-controls touch-action="pan-y" interaction-prompt="none"
+          environment-image="neutral" exposure="1" shadow-intensity="1" camera-orbit="35deg 75deg auto" min-camera-orbit="auto auto 0.05m" min-field-of-view="4deg" max-field-of-view="45deg" interpolation-decay="120"></model-viewer>` : ""}
+        <img class="${p.contain ? "contain" : ""}" src="${esc(p.imagem)}" alt="${esc(p.nome)}" loading="lazy">
+        <div class="crt-ferr">
+          ${p.modelo ? `<button type="button" data-f="3d" class="on">3D</button><button type="button" data-f="foto">Foto</button><button type="button" data-f="centro" title="Voltar à vista inicial">${ic("refresh")}</button>` : ""}
+          <button type="button" data-f="tela" title="Tela cheia">${ic("expand")} <span>Tela cheia</span></button>
+        </div>
+        ${p.modelo ? `<p class="crt-dica">Arraste para girar · role ou pince para ampliar · botão direito ou dois dedos para mover</p>` : ""}
+      </div>
       <div><span class="eyebrow">${esc(nomeEquipe(p.equipe))} · ${esc(p.tipo)}</span><h3 class="crt-sub">Marcos do ${esc(p.nome)}</h3>
         ${p.marcos.length ? `<ol class="crt-marcos">${p.marcos.map(x => `<li>${esc(x)}</li>`).join("")}</ol>` : `<p class="mut">Ainda sem marcos registrados.</p>`}</div>`;
+    if (p.modelo) carregarModelViewer();
+    anatomia(p);
+    const box = $("crt-foto");
+    box.querySelector(".crt-ferr").onclick = e => {
+      const b = e.target.closest("button"); if (!b) return;
+      const f = b.dataset.f, mv = $("crt-mv");
+      if (f === "3d" || f === "foto") { box.classList.toggle("modo-3d", f === "3d"); box.querySelectorAll('[data-f="3d"],[data-f="foto"]').forEach(x => x.classList.toggle("on", x === b)); }
+      if (f === "centro" && mv) { mv.cameraOrbit = "35deg 75deg auto"; mv.cameraTarget = "auto auto auto"; mv.fieldOfView = "auto"; }
+      if (f === "tela") { if (document.fullscreenElement) document.exitFullscreen(); else (box.requestFullscreen || box.webkitRequestFullscreen)?.call(box); }
+    };
+    box.querySelector("img").onclick = () => { if (!box.classList.contains("modo-3d")) (box.requestFullscreen || box.webkitRequestFullscreen)?.call(box); };
   };
 
   const desenha = () => {
     $("anos").innerHTML = [["todos", "Todos"], ...anos.map(a => [String(a), String(a)])].map(([v, t]) => `<button class="chip ${v === ano ? "on" : ""}" data-a="${v}">${t}</button>`).join("");
     $("times").innerHTML = [["todas", "Todas", ""], ["rockets", "Rockets", "r"], ["sats", "Sats", "b"]].map(([v, t, c]) => `<button class="chip ${c} ${v === time ? "on" : ""}" data-t="${v}">${t}</button>`).join("");
     const lista = filtrados();
-    $("conquistas").innerHTML = linhaDoTempo(CONQUISTAS.filter(c => (ano === "todos" || String(c.ano) === ano) && (time === "todas" || c.equipe === time || c.equipe === "geral")));
     if (!lista.length) { $("crt").style.display = "none"; $("crt-extra").innerHTML = `<div class="notice">Nenhum projeto com esse filtro.</div>`; revelar(); return; }
     $("crt").style.display = "";
     $("crt-track").innerHTML = lista.map(p => `<button class="crt-item ${corEquipe(p.equipe)} ${(p.perfil?.tipo || (p.equipe === "sats" ? "cubesat" : "")) === "cubesat" ? "sat" : ""}" data-id="${p.id}" style="--h:${altura(p)}" aria-label="${esc(p.nome)}">
