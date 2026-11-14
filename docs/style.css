@@ -540,10 +540,6 @@ a.card:hover{border-color:#3a4157;transform:translateY(-3px)}
 .reel-dots button.on{width:26px;border-radius:5px;background:var(--red)}
 @media (max-width:600px){.snap{width:78vw}.reel-arrow{display:none}.snap-cap{font-size:.88rem}}
 
-/* planeta girando no topo da página inicial */
-.hero .bg.planeta{inset:-18% -15% -12% -15%;transform-origin:50% 425%;animation:planeta 90s ease-in-out infinite alternate;will-change:transform}
-@keyframes planeta{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
-@media (prefers-reduced-motion:reduce){.hero .bg.planeta{animation:none}}
 /* carrossel de projetos com patches de missão */
 .pcar{position:relative}
 .pcar-track{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 72px)/4);gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 2px 12px;scrollbar-width:none;
