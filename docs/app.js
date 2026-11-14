@@ -63,7 +63,7 @@ const NAV = [
   ["index.html", "Início", ""],
   ["rockets.html", "Rockets", "r"],
   ["sats.html", "Sats", "b"],
-  ["subteams.html", "Subteams", ""],
+  ["aeroespacial.html", "Aeroespacial", ""],
   ["equipe.html", "Equipe", ""],
   ["projetos.html", "Projetos", ""],
   ["parceiros.html", "Parceiros", ""],
@@ -85,7 +85,7 @@ function layout() {
     <div><a class="brand" href="index.html"><img src="img/logos/minerva-aeroespacial.webp" alt="" width="56" height="40"><span>Minerva Aeroespacial</span></a>
       <p class="mut" style="margin-top:14px;font-size:.92rem">${esc(SITE.grupo)}. Iniciativa estudantil da Escola Politécnica, fundada em ${SITE.fundacao}.</p>
       <div class="inst"><img src="img/logos/ufrj-branco.webp" alt="UFRJ"><img src="img/logos/politecnica-branco.webp" alt="Escola Politécnica"></div></div>
-    <div><h4>Equipes</h4><a href="rockets.html">Minerva Rockets</a><a href="sats.html">Minerva Sats</a><a href="subteams.html">Subteams</a><a href="equipe.html">Equipe por ciclo</a></div>
+    <div><h4>Equipes</h4><a href="rockets.html">Minerva Rockets</a><a href="sats.html">Minerva Sats</a><a href="aeroespacial.html">Equipe Aeroespacial</a><a href="equipe.html">Equipe por ciclo</a></div>
     <div><h4>Site</h4><a href="projetos.html">Projetos</a><a href="parceiros.html">Parceiros</a><a href="noticias.html">Notícias</a><a href="contato.html">Contato</a></div>
     <div><h4>Contato</h4><a href="mailto:${SITE.emailRockets}">${SITE.emailRockets}</a><a href="mailto:${SITE.emailSats}">${SITE.emailSats}</a>
       <div class="social">${SITE.redes.map(r => `<a href="${esc(r.url)}" target="_blank" rel="noopener" aria-label="${esc(r.rede)} ${esc(r.nome)}" title="${esc(r.rede)} — ${esc(r.nome)}">${ic(r.icone)}</a>`).join("")}</div></div>
@@ -177,15 +177,34 @@ function interacoes() {
   });
 }
 
-/* carrossel de vídeos: setas rolam uma "página" para o lado */
-function carrosseis() {
-  document.querySelectorAll(".vcar-btn").forEach(b => {
-    const el = $(b.dataset.car); if (!el) return;
-    const upd = () => document.querySelectorAll(`.vcar-btn[data-car="${b.dataset.car}"]`).forEach(x => {
-      x.disabled = x.dataset.dir === "-1" ? el.scrollLeft < 4 : el.scrollLeft + el.clientWidth >= el.scrollWidth - 4; });
-    b.onclick = () => el.scrollBy({ left: Number(b.dataset.dir) * el.clientWidth, behavior: "smooth" });
-    el.addEventListener("scroll", upd, { passive: true }); window.addEventListener("resize", upd); setTimeout(upd, 50);
+/* vídeos em "snapshot reel": fotos tipo polaroide que deslizam para o lado, com a do centro em destaque */
+function reel() {
+  const box = $("reel"); if (!box) return;
+  const lista = VIDEOS.filter(v => /^(Lançamento|Teste|Lançamos)/.test(v.titulo));
+  box.innerHTML = lista.map((v, i) => `<button type="button" class="snap" data-i="${i}" data-vid="${esc(v.id)}" data-titulo="${esc(v.titulo)}">
+      <span class="snap-ph"><img src="${thumb(v.id)}" alt="" loading="lazy" onerror="this.style.opacity=0"><span class="vplay">${ic("play")}</span><span class="vdur">${esc(v.dur)}</span></span>
+      <span class="snap-cap">${esc(v.titulo)}</span></button>`).join("");
+  const dots = $("reel-dots");
+  dots.innerHTML = lista.map((_, i) => `<button type="button" aria-label="Vídeo ${i + 1}" data-i="${i}"></button>`).join("");
+  const snaps = [...box.children], n = snaps.length; let at = 0, timer;
+  const pos = () => snaps.forEach((s, i) => {
+    let d = i - at; if (d > n / 2) d -= n; if (d < -n / 2) d += n;
+    const a = Math.abs(d);
+    s.style.transform = `translate(-50%,-50%) translateX(${d * 58}%) scale(${a === 0 ? 1 : a === 1 ? .78 : .62}) rotate(${d === 0 ? 0 : d * 5}deg)`;
+    s.style.zIndex = 10 - a; s.style.opacity = a > 2 ? 0 : a === 2 ? .45 : 1; s.style.pointerEvents = a > 2 ? "none" : "";
+    s.classList.toggle("on", d === 0);
+    if (d === 0) { s.dataset.video = s.dataset.vid; } else delete s.dataset.video;
+    s.tabIndex = d === 0 ? 0 : -1;
   });
+  const ir = i => { at = (i + n) % n; pos(); [...dots.children].forEach((b, k) => b.classList.toggle("on", k === at)); };
+  const auto = () => { clearInterval(timer); if (!matchMedia("(prefers-reduced-motion: reduce)").matches) timer = setInterval(() => ir(at + 1), 4500); };
+  box.addEventListener("click", e => { const s = e.target.closest(".snap"); if (s && !s.classList.contains("on")) { e.stopPropagation(); ir(+s.dataset.i); auto(); } }, true);
+  dots.onclick = e => { const b = e.target.closest("button"); if (b) { ir(+b.dataset.i); auto(); } };
+  document.querySelectorAll("[data-reel]").forEach(b => b.onclick = () => { ir(at + Number(b.dataset.reel)); auto(); });
+  let x0 = null; box.addEventListener("pointerdown", e => x0 = e.clientX);
+  box.addEventListener("pointerup", e => { if (x0 !== null && Math.abs(e.clientX - x0) > 40) { ir(at + (e.clientX < x0 ? 1 : -1)); auto(); } x0 = null; });
+  box.parentElement.addEventListener("mouseenter", () => clearInterval(timer)); box.parentElement.addEventListener("mouseleave", auto);
+  ir(0); auto();
 }
 
 /* ---------- páginas ---------- */
@@ -207,8 +226,8 @@ function rockets() {
     .map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
   $("conquistas").innerHTML = linhaDoTempo(CONQUISTAS.filter(c => c.equipe === "rockets"));
   $("doe").innerHTML = doacaoHTML();
-  $("videos").innerHTML = videosHTML(VIDEOS.filter(v => /^(Lançamento|Teste|Lançamos)/.test(v.titulo)));
-  carrosseis();
+  reel();
+  subequipes("rockets");
 }
 
 function sats() {
@@ -219,33 +238,44 @@ function sats() {
     <a class="sub-card b reveal" href="projetos.html#${p.id}"><div class="im" style="padding:0"><img src="${esc(p.imagem)}" alt="${esc(p.nome)}" style="width:100%;height:100%;object-fit:cover" loading="lazy"></div>
     <div class="tx"><span class="tag">${esc(p.periodo)}</span><h3>${esc(p.nome)}</h3><p>${esc(p.resumo)}</p></div></a>`).join("");
   $("conquistas").innerHTML = linhaDoTempo(CONQUISTAS.filter(c => c.equipe === "sats"));
+  subequipes("sats");
 }
 
-function subteams() {
+/* cartões "blueprint" de subequipe, usados nas páginas Rockets, Sats e Aeroespacial */
+function blueprintsHTML(lista) {
   const pessoas = membrosAtuais();
-  const filtro = param("equipe") || "todas";
-  $("filtros").innerHTML = [["todas", "Todas", ""], ["rockets", "Rockets", "r"], ["sats", "Sats", "b"], ["adm", "Administrativo", "g"]]
-    .map(([v, t, c]) => `<button class="chip ${c} ${v === filtro ? "on" : ""}" data-v="${v}">${t}</button>`).join("");
-  const desenha = f => {
-    $("subteams").innerHTML = SUBTEAMS.filter(s => f === "todas" || s.equipe === f || s.equipe === "geral").map(s => {
-      const gente = pessoas.filter(m => m.area === s.id);
-      const profs = s.id === "diretoria" ? SITE.orientadores : [];
-      const lideres = gente.filter(m => m.lider), demais = gente.filter(m => !m.lider);
-      const arte = s.arte.startsWith("svg:") ? BP[s.arte.slice(4)] : `<img src="${s.arte}" alt="" loading="lazy">`;
-      return `<details class="blueprint ${corEquipe(s.equipe) === "b" ? "" : corEquipe(s.equipe)}" id="${s.id}">
-        <summary><div class="art">${arte}</div><h3>${esc(s.nome)}</h3><div class="team-lbl">${nomeEquipe(s.equipe)} · ${gente.length} membros${profs.length ? ` + ${profs.length} orientadores` : ""}</div>
-        <span class="more">Ver detalhes ${ic("down")}</span></summary>
-        <div class="body"><p>${esc(s.desc)}</p>
-          ${lideres.length ? `<p style="margin:14px 0 4px"><b>Liderança</b></p><div class="people">${lideres.map(m => `<span class="pill lead">${esc(m.nome)} — ${esc(m.cargo)}</span>`).join("")}</div>` : ""}
-          ${profs.length ? `<p style="margin:14px 0 4px"><b>Professores orientadores</b></p><div class="people">${profs.map(o => `<span class="pill lead">${esc(o.nome)} — ${esc(o.depto)}</span>`).join("")}</div>` : ""}
-          ${demais.length ? `<p style="margin:14px 0 4px"><b>Membros</b></p><div class="people">${demais.map(m => `<span class="pill">${esc(m.nome)}${m.cargo !== "Integrante" ? " — " + esc(m.cargo) : ""}</span>`).join("")}</div>` : ""}
-        </div></details>`;
-    }).join("");
-    if (location.hash) { const el = document.querySelector(location.hash); if (el && el.tagName === "DETAILS") { el.open = true; el.scrollIntoView(); } }
-  };
-  $("filtros").onclick = e => { const b = e.target.closest(".chip"); if (!b) return;
-    $("filtros").querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x === b)); setParam("equipe", b.dataset.v === "todas" ? "" : b.dataset.v); desenha(b.dataset.v); };
-  desenha(filtro);
+  return lista.map(s => {
+    const gente = pessoas.filter(m => m.area === s.id);
+    const lideres = gente.filter(m => m.lider), demais = gente.filter(m => !m.lider);
+    const arte = s.arte.startsWith("svg:") ? BP[s.arte.slice(4)] : `<img src="${s.arte}" alt="" loading="lazy">`;
+    return `<details class="blueprint ${corEquipe(s.equipe) === "b" ? "" : corEquipe(s.equipe)}" id="${s.id}">
+      <summary><div class="art">${arte}</div><h3>${esc(s.nome)}</h3><div class="team-lbl">${nomeEquipe(s.equipe)} · ${gente.length} membros</div>
+      <span class="more">Ver detalhes ${ic("down")}</span></summary>
+      <div class="body"><p>${esc(s.desc)}</p>
+        ${lideres.length ? `<p style="margin:14px 0 4px"><b>Liderança</b></p><div class="people">${lideres.map(m => `<span class="pill lead">${esc(m.nome)} — ${esc(m.cargo)}</span>`).join("")}</div>` : ""}
+        ${demais.length ? `<p style="margin:14px 0 4px"><b>Membros</b></p><div class="people">${demais.map(m => `<span class="pill">${esc(m.nome)}${m.cargo !== "Integrante" ? " — " + esc(m.cargo) : ""}</span>`).join("")}</div>` : ""}
+      </div></details>`;
+  }).join("");
+}
+function abrirPeloHash() {
+  if (!location.hash) return;
+  const el = document.querySelector(location.hash);
+  if (el && el.tagName === "DETAILS") { el.open = true; setTimeout(() => el.scrollIntoView({ block: "start" }), 60); }
+}
+function subequipes(equipe) {
+  const el = $("subequipes-grid"); if (!el) return;
+  el.innerHTML = blueprintsHTML(SUBTEAMS.filter(s => s.equipe === equipe)); abrirPeloHash();
+}
+
+function aeroespacial() {
+  const pessoas = membrosAtuais();
+  $("orientadores").innerHTML = SITE.orientadores.map(o => `<div class="person lead"><div class="av n">${iniciais(o.nome.replace("Prof. ", ""))}</div><div><b>${esc(o.nome)}</b><small>${esc(o.depto)}</small></div></div>`).join("");
+  const grupo = (titulo, areas, cor) => { const g = pessoas.filter(m => areas.includes(m.area)).sort((x, y) => y.lider - x.lider);
+    return g.length ? `<section class="dept"><div class="dept-h"><span class="bar ${cor}"></span><h3>${titulo}</h3><span class="n">${g.length}</span></div><div class="people-grid">${g.map(cardPessoa).join("")}</div></section>` : ""; };
+  $("diretoria").innerHTML = grupo("Diretoria geral", ["diretoria"], "g") + grupo("Diretoria — Minerva Rockets", ["diretoria-rockets"], "r") + grupo("Diretoria — Minerva Sats", ["diretoria-sats"], "b");
+  $("adm-lideranca").innerHTML = grupo("Gerência administrativa", ["adm-geral"], "g");
+  $("subequipes-grid").innerHTML = blueprintsHTML(SUBTEAMS.filter(s => s.equipe === "adm"));
+  abrirPeloHash();
 }
 
 function equipe() {
@@ -545,6 +575,6 @@ function contato() {
 document.addEventListener("DOMContentLoaded", () => {
   layout();
   interacoes();
-  ({ home, rockets, sats, subteams, equipe, projetos, parceiros, noticias, post, contato })[document.body.dataset.page]?.();
+  ({ home, rockets, sats, aeroespacial, equipe, projetos, parceiros, noticias, post, contato })[document.body.dataset.page]?.();
   revelar();
 });

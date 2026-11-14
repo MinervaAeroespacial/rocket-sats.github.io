@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20261113c">
 </head>
 <body data-page="sats">
 <header id="header"></header>
@@ -61,14 +61,11 @@
   </div>
 </section>
 
-<section class="sec">
+<section class="sec" id="subequipes" style="scroll-margin-top:70px">
   <div class="container">
-    <div class="center reveal" style="margin-bottom:36px"><span class="eyebrow blue">Como a equipe se organiza</span><h2>Subequipes</h2></div>
-    <div class="grid g3">
-      <a class="card b reveal" href="subteams.html#eletronica-sats"><div class="ico"><svg class="svg" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg></div><h3>Eletrônica</h3><p>Computador de bordo, tratamento de dados (CDH), energia (EPS) e comunicação.</p></a>
-      <a class="card b reveal" href="subteams.html#mecanica-sats"><div class="ico"><svg class="svg" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg></div><h3>Mecânica</h3><p>Estrutura do CubeSat, integração e qualificação mecânica e térmica.</p></a>
-      <a class="card b reveal" href="subteams.html#payload-sats"><div class="ico"><svg class="svg" viewBox="0 0 24 24"><path d="M9 3h6M10 9V3h4v6l5 9a2 2 0 0 1-1.8 3H6.8A2 2 0 0 1 5 18z"/><path d="M7 15h10"/></svg></div><h3>Eletrônica de Payload</h3><p>Sensores e experimentos que dão a cada missão o seu objetivo científico.</p></a>
-    </div>
+    <div class="center reveal" style="margin-bottom:36px"><span class="eyebrow blue">Como a equipe se organiza</span><h2>Subequipes da Minerva Sats</h2>
+      <p class="lead">Cada subequipe tem gerente e membros dedicados. Abra um cartão para ver quem está nela.</p></div>
+    <div class="bp-grid" id="subequipes-grid"></div>
   </div>
 </section>
 
@@ -94,7 +91,7 @@
 
 </main>
 <footer id="footer"></footer>
-<script src="dados.js"></script>
-<script src="app.js"></script>
+<script src="dados.js?v=20261113c"></script>
+<script src="app.js?v=20261113c"></script>
 </body>
 </html>

@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20261113c">
 </head>
 <body data-page="rockets">
 <header id="header"></header>
@@ -48,22 +48,30 @@
     <div class="center reveal" style="margin-bottom:40px">
       <span class="eyebrow red">Hemera v.1 · subsistemas</span>
       <h2>Por dentro do foguete</h2>
-      <p class="lead">Cada subsistema é responsabilidade de uma subequipe. Clique para conhecer quem faz.</p>
+      <p class="lead">Cada subsistema é responsabilidade de uma subequipe. Clique para conhecer a subequipe responsável.</p>
     </div>
     <div class="grid g3">
-      <a class="sub-card reveal" href="subteams.html#propulsao"><div class="im"><img src="img/hemera/motor-notus.webp" alt="Tubeira do motor Notus v.1" loading="lazy"></div>
+      <a class="sub-card reveal" href="#propulsao"><div class="im"><img src="img/hemera/motor-notus.webp" alt="Tubeira do motor Notus v.1" loading="lazy"></div>
         <div class="tx"><span class="tag">Propulsão</span><h3>Motor Notus v.1</h3><p>Motor sólido SRAD classe N: 9,5 kg de KNSB (65% nitrato de potássio, 35% sorbitol), 10,8 kN·s de impulso total, 5,8 MPa de pressão e 2,9 s de queima.</p></div></a>
-      <a class="sub-card reveal" href="subteams.html#aeroestruturas"><div class="im"><img src="img/hemera/hemera-v1-h.webp" alt="Hemera v.1" loading="lazy"></div>
+      <a class="sub-card reveal" href="#aeroestruturas"><div class="im"><img src="img/hemera/hemera-v1-h.webp" alt="Hemera v.1" loading="lazy"></div>
         <div class="tx"><span class="tag">Aeroestruturas</span><h3>Fuselagem modular</h3><p>Compósito de fibra de vidro e epóxi com 174 mm de diâmetro, coifa Von Kármán, aletas enflechadas com fibra de carbono e acopladores de alumínio 6101-T6. Margem de estabilidade de 1,8 calibre.</p></div></a>
-      <a class="sub-card reveal" href="subteams.html#recuperacao"><div class="im"><img src="img/hemera/paraquedas.webp" alt="Paraquedas do Hemera" loading="lazy"></div>
+      <a class="sub-card reveal" href="#recuperacao"><div class="im"><img src="img/hemera/paraquedas.webp" alt="Paraquedas do Hemera" loading="lazy"></div>
         <div class="tx"><span class="tag">Recuperação</span><h3>Dois estágios com reefing</h3><p>Ejeção pneumática por CO₂ no apogeu, paraquedas de nylon HyperD com skirt reefing e line cutters a 500 m. Desce a 20 m/s e depois a 6,5 m/s.</p></div></a>
-      <a class="sub-card reveal" href="subteams.html#eletronica-rockets"><div class="im"><img src="img/hemera/avionica.webp" alt="Baia de aviônica" loading="lazy"></div>
+      <a class="sub-card reveal" href="#eletronica-rockets"><div class="im"><img src="img/hemera/avionica.webp" alt="Baia de aviônica" loading="lazy"></div>
         <div class="tx"><span class="tag">Eletrônica</span><h3>Aviônica redundante</h3><p>Computadores de voo RRC3 (primário) e Blue Raven (reserva), rastreador GPS Featherweight e sensores barométricos, IMU e GNSS.</p></div></a>
       <a class="sub-card reveal" href="sats.html"><div class="im"><img src="img/hemera/cubesat-2u.webp" alt="CubeSat 2U da carga útil" loading="lazy"></div>
         <div class="tx"><span class="tag">Carga útil</span><h3>CubeSat 2U</h3><p>Abriga a aviônica do futuro Hemera v.2. Este voo é o passo de validação para o foguete de dois estágios.</p></div></a>
       <a class="sub-card reveal" href="noticias.html"><div class="im"><img src="img/hemera/pitot.webp" alt="Coifa com tubo de Pitot" loading="lazy"></div>
         <div class="tx"><span class="tag">Aquisição de dados</span><h3>Pitot e célula de carga</h3><p>Tubo de Pitot para velocidade, célula de carga para o choque de abertura do paraquedas e sensor de pressão no motor.</p></div></a>
     </div>
+  </div>
+</section>
+
+<section class="sec" id="subequipes" style="scroll-margin-top:70px">
+  <div class="container">
+    <div class="center reveal" style="margin-bottom:36px"><span class="eyebrow red">Como a equipe se organiza</span><h2>Subequipes da Minerva Rockets</h2>
+      <p class="lead">Cada subequipe tem gerente e membros dedicados. Abra um cartão para ver quem está nela.</p></div>
+    <div class="bp-grid" id="subequipes-grid"></div>
   </div>
 </section>
 
@@ -117,10 +125,14 @@
 
 <section class="sec alt">
   <div class="container">
-    <div class="vcar-head reveal"><div><span class="eyebrow red">Do arquivo</span><h2>Lançamentos e testes</h2>
-      <p class="mut">Mark-1, Jararaca, Insônia, Imperius, Sidera e o teste estático de um motor classe E, no canal da equipe no YouTube.</p></div>
-      <div class="vcar-nav"><button type="button" class="vcar-btn" data-car="videos" data-dir="-1" aria-label="Vídeos anteriores">&#8249;</button><button type="button" class="vcar-btn" data-car="videos" data-dir="1" aria-label="Próximos vídeos">&#8250;</button></div></div>
-    <div class="videos carousel" id="videos"></div>
+    <div class="center reveal" style="margin-bottom:10px"><span class="eyebrow red">Do arquivo</span><h2>Lançamentos e testes</h2>
+      <p class="mut">Mark-1, Jararaca, Insônia, Imperius, Sidera e o teste estático de um motor classe E. Clique na foto do centro para assistir.</p></div>
+    <div class="reel-wrap">
+      <button type="button" class="reel-arrow l" data-reel="-1" aria-label="Vídeo anterior">&#8249;</button>
+      <div class="reel" id="reel" aria-roledescription="carrossel"></div>
+      <button type="button" class="reel-arrow r" data-reel="1" aria-label="Próximo vídeo">&#8250;</button>
+    </div>
+    <div class="reel-dots" id="reel-dots"></div>
   </div>
 </section>
 
@@ -141,7 +153,7 @@
     <div class="cta-txt">
       <h2>Próximo passo: Hemera v.2</h2>
       <p class="lead">Um foguete de dois estágios propulsionados, com o Hemera v.1 como estágio superior. Ajude a tirar esse projeto do papel.</p>
-      <div class="btns"><a class="btn btn-red" href="parceiros.html#seja-parceiro">Apoie <svg class="svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><a class="btn btn-ghost" href="subteams.html?equipe=rockets">Conheça as subequipes</a></div>
+      <div class="btns"><a class="btn btn-red" href="parceiros.html#seja-parceiro">Apoie <svg class="svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a><a class="btn btn-ghost" href="#subequipes">Conheça as subequipes</a></div>
     </div>
     <figure class="cta-img"><img src="img/hemera/hemera-v2-quadrado.webp" alt="Modelo 3D do foguete Hemera v.2, de dois estágios" width="900" height="900" loading="lazy"></figure>
   </div></div>
@@ -149,7 +161,7 @@
 
 </main>
 <footer id="footer"></footer>
-<script src="dados.js"></script>
-<script src="app.js"></script>
+<script src="dados.js?v=20261113c"></script>
+<script src="app.js?v=20261113c"></script>
 </body>
 </html>
