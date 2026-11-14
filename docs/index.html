@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261113c">
+<link rel="stylesheet" href="style.css?v=20261113d">
 </head>
 <body data-page="home">
 <header id="header"></header>
@@ -110,9 +110,14 @@
   <div class="container">
     <div style="display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:28px">
       <div><span class="eyebrow">YouTube</span><h2 style="margin:0">Do arquivo da Minerva</h2></div>
-      <a class="go" href="noticias.html#videos">Todos os vídeos <svg class="svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a>
+      <a class="go" href="noticias.html#videos-sec">Todos os vídeos <svg class="svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a>
     </div>
-    <div class="videos" id="videos"></div>
+    <div class="reel-wrap">
+      <button type="button" class="reel-arrow l" data-reel="-1" aria-label="Vídeo anterior">&#8249;</button>
+      <div class="reel" id="reel" aria-roledescription="carrossel"></div>
+      <button type="button" class="reel-arrow r" data-reel="1" aria-label="Próximo vídeo">&#8250;</button>
+    </div>
+    <div class="reel-dots"></div>
   </div>
 </section>
 
@@ -140,7 +145,7 @@
 
 </main>
 <footer id="footer"></footer>
-<script src="dados.js?v=20261113c"></script>
-<script src="app.js?v=20261113c"></script>
+<script src="dados.js?v=20261113d"></script>
+<script src="app.js?v=20261113d"></script>
 </body>
 </html>

@@ -178,13 +178,13 @@ function interacoes() {
 }
 
 /* vídeos em "snapshot reel": fotos tipo polaroide que deslizam para o lado, com a do centro em destaque */
-function reel() {
-  const box = $("reel"); if (!box) return;
-  const lista = VIDEOS.filter(v => /^(Lançamento|Teste|Lançamos)/.test(v.titulo));
+function reel(lista, id = "reel") {
+  const box = $(id); if (!box || !lista.length) return;
+  const wrap = box.closest(".reel-wrap");
   box.innerHTML = lista.map((v, i) => `<button type="button" class="snap" data-i="${i}" data-vid="${esc(v.id)}" data-titulo="${esc(v.titulo)}">
       <span class="snap-ph"><img src="${thumb(v.id)}" alt="" loading="lazy" onerror="this.style.opacity=0"><span class="vplay">${ic("play")}</span><span class="vdur">${esc(v.dur)}</span></span>
       <span class="snap-cap">${esc(v.titulo)}</span></button>`).join("");
-  const dots = $("reel-dots");
+  const dots = wrap.nextElementSibling;
   dots.innerHTML = lista.map((_, i) => `<button type="button" aria-label="Vídeo ${i + 1}" data-i="${i}"></button>`).join("");
   const snaps = [...box.children], n = snaps.length; let at = 0, timer;
   const pos = () => snaps.forEach((s, i) => {
@@ -200,10 +200,10 @@ function reel() {
   const auto = () => { clearInterval(timer); if (!matchMedia("(prefers-reduced-motion: reduce)").matches) timer = setInterval(() => ir(at + 1), 4500); };
   box.addEventListener("click", e => { const s = e.target.closest(".snap"); if (s && !s.classList.contains("on")) { e.stopPropagation(); ir(+s.dataset.i); auto(); } }, true);
   dots.onclick = e => { const b = e.target.closest("button"); if (b) { ir(+b.dataset.i); auto(); } };
-  document.querySelectorAll("[data-reel]").forEach(b => b.onclick = () => { ir(at + Number(b.dataset.reel)); auto(); });
+  wrap.querySelectorAll("[data-reel]").forEach(b => b.onclick = () => { ir(at + Number(b.dataset.reel)); auto(); });
   let x0 = null; box.addEventListener("pointerdown", e => x0 = e.clientX);
   box.addEventListener("pointerup", e => { if (x0 !== null && Math.abs(e.clientX - x0) > 40) { ir(at + (e.clientX < x0 ? 1 : -1)); auto(); } x0 = null; });
-  box.parentElement.addEventListener("mouseenter", () => clearInterval(timer)); box.parentElement.addEventListener("mouseleave", auto);
+  wrap.addEventListener("mouseenter", () => clearInterval(timer)); wrap.addEventListener("mouseleave", auto);
   ir(0); auto();
 }
 
@@ -216,7 +216,7 @@ function home() {
   $("ultimas").innerHTML = POSTS.slice(0, 3).map(cardNoticia).join("");
   $("logos").innerHTML = faixaLogos();
   $("doe").innerHTML = doacaoHTML();
-  $("videos").innerHTML = videosHTML(VIDEOS.slice(0, 4));
+  reel(VIDEOS.slice(0, 8));
   $("redes").innerHTML = redesHTML();
 }
 
@@ -226,7 +226,7 @@ function rockets() {
     .map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
   $("conquistas").innerHTML = linhaDoTempo(CONQUISTAS.filter(c => c.equipe === "rockets"));
   $("doe").innerHTML = doacaoHTML();
-  reel();
+  reel(VIDEOS.filter(v => /^(Lançamento|Teste|Lançamos)/.test(v.titulo)));
   subequipes("rockets");
 }
 
@@ -532,7 +532,7 @@ function parceiros() {
 
 function noticias() {
   $("lista").innerHTML = POSTS.map(cardNoticia).join("");
-  $("videos").innerHTML = videosHTML(VIDEOS);
+  reel(VIDEOS);
   $("redes").innerHTML = redesHTML();
   $("imprensa").innerHTML = IMPRENSA.map(m => `<a class="imp reveal" href="${esc(m.url)}" target="_blank" rel="noopener">
     <span class="imp-v">${esc(m.veiculo)}</span><span class="imp-d">${esc(m.data)}</span><b>${esc(m.titulo)}</b><p>${esc(m.resumo)}</p>
