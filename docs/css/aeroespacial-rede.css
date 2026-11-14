@@ -74,3 +74,14 @@
   .rede-painel{height:auto;max-height:none;border-left:0;border-top:1px solid var(--line)}
 }
 @media (prefers-reduced-motion:reduce){.rd-link,.rd-node,.rd-node circle.ring{transition:none}}
+
+/* versão 3D */
+.rede-3d{background:radial-gradient(800px 500px at 50% 30%,rgba(43,123,228,.10),transparent 65%)}
+.rede-3d canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+.rede-3d canvas:active{cursor:grabbing}
+.rede-seg{display:inline-flex;align-items:center;gap:4px;padding:4px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:.82rem}
+.rede-seg span{color:#8a93a6;padding:0 8px 0 10px}
+.rede-seg button{padding:6px 12px;border-radius:999px;border:0;background:transparent;color:#c9cfdb;font:inherit;cursor:pointer}
+.rede-seg button[aria-pressed="true"]{background:#fff;color:#0b0d12;font-weight:600}
+.rede-tip{position:absolute;z-index:5;pointer-events:none;padding:5px 10px;border-radius:8px;background:rgba(10,12,18,.92);border:1px solid rgba(255,255,255,.12);color:#e8ebf0;font-size:.78rem;white-space:nowrap}
+.rede-3d .rede-trilha,.rede-3d .rede-zoom,.rede-3d .rede-dica{z-index:4}

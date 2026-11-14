@@ -386,9 +386,6 @@ const SECOES = {
       "Rastreamento por GPS Featherweight e antena integrada à aleta (fintenna)",
       "Suportes para câmeras frontal e lateral",
       "Aquisição de dados de voo e suporte de solo" ] },
-    { secao: "Acopladores", modelo: "img/3d/hemera-v1/acopladores.glb", subsistema: "Aeroestruturas", forma: "interestagio", tam: .35, tarefas: [
-      "Acopladores universais macho e fêmea usinados em alumínio 6101-T6",
-      "Fuselagem modular em compósito de fibra de vidro e epóxi, com 174 mm de diâmetro" ] },
     { secao: "Módulo de Propulsão", modelo: "img/3d/hemera-v1/propulsao.glb", subsistema: "Propulsão", forma: "modulo", tam: 1.5, tarefas: [
       "Motor sólido SRAD Notus v.1, classe N, com 9,5 kg de propelente KNSB",
       "Grãos de 45 e 50 mm com inibidor, anel retentor e anéis de vedação",

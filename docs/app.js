@@ -63,7 +63,7 @@ const NAV = [
   ["index.html", "Início", ""],
   ["rockets.html", "Rockets", "r"],
   ["sats.html", "Sats", "b"],
-  ["aeroespacial.html", "Aeroespacial", ""],
+  ["aeroespacial.html", "Ecossistema", ""],
   ["equipe.html", "Equipe", ""],
   ["projetos.html", "Projetos", ""],
   ["parceiros.html", "Parceiros", ""],
@@ -85,7 +85,7 @@ function layout() {
     <div><a class="brand" href="index.html"><img src="img/logos/minerva-aeroespacial.webp" alt="" width="56" height="40"><span>Minerva Aeroespacial</span></a>
       <p class="mut" style="margin-top:14px;font-size:.92rem">${esc(SITE.grupo)}. Iniciativa estudantil da Escola Politécnica, fundada em ${SITE.fundacao}.</p>
       <div class="inst"><img src="img/logos/ufrj-branco.webp" alt="UFRJ"><img src="img/logos/politecnica-branco.webp" alt="Escola Politécnica"></div></div>
-    <div><h4>Equipes</h4><a href="rockets.html">Minerva Rockets</a><a href="sats.html">Minerva Sats</a><a href="aeroespacial.html">Equipe Aeroespacial</a><a href="equipe.html">Equipe por ciclo</a></div>
+    <div><h4>Equipes</h4><a href="rockets.html">Minerva Rockets</a><a href="sats.html">Minerva Sats</a><a href="aeroespacial.html">Ecossistema</a><a href="equipe.html">Equipe por ciclo</a></div>
     <div><h4>Site</h4><a href="projetos.html">Projetos</a><a href="parceiros.html">Parceiros</a><a href="noticias.html">Notícias</a><a href="contato.html">Contato</a></div>
     <div><h4>Contato</h4><a href="mailto:${SITE.emailRockets}">${SITE.emailRockets}</a><a href="mailto:${SITE.emailSats}">${SITE.emailSats}</a>
       <div class="social">${SITE.redes.map(r => `<a href="${esc(r.url)}" target="_blank" rel="noopener" aria-label="${esc(r.rede)} ${esc(r.nome)}" title="${esc(r.rede)} — ${esc(r.nome)}">${ic(r.icone)}</a>`).join("")}</div></div>
@@ -144,7 +144,7 @@ function doacaoHTML() {
     <p class="mut">O Hemera voou com sucesso na IREC 2026. Na LASC 2026, o paraquedas não abriu e o foguete se perdeu, num prejuízo de cerca de R$ 80 mil. Sua doação ajuda a repor materiais e reconstruir o foguete.</p>
     <div class="progress" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><span style="width:${pct}%"></span></div>
     <div class="prog-nums"><b>${brl(d.arrecadado)}</b><span>de ${brl(d.meta)} · ${d.apoiadores} apoiadores · ${pct}%</span></div>
-    <small class="mut2">Valores de ${esc(d.atualizadoEm)}. Veja o valor atual na Vakinha.</small></div>
+    </div>
     <div class="donate-cta"><a class="btn btn-red" href="${esc(d.url)}" target="_blank" rel="noopener">${ic("heart")} Doar na Vakinha</a>
       <div class="pix"><span>Pix</span><code id="pix">${esc(d.pix)}</code><button class="chip" type="button" data-copy="${esc(d.pix)}">Copiar</button></div></div></div>`;
 }

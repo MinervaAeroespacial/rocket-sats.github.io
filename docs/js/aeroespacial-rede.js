@@ -3,8 +3,9 @@
    sozinhas quando dois nós visíveis estão conectados.
    Regra de visibilidade: aparece o centro, todo nó "expandido" e os vizinhos de cada nó expandido.
    Clicar num nó o seleciona e o expande; clicar de novo no nó selecionado o recolhe. */
-(function () {
-  const raiz = document.getElementById("rede"); if (!raiz || !window.d3 || typeof REDE === "undefined") return;
+/* versão 2D: usada quando o navegador não tem WebGL ou quando o visitante escolhe "Ver em 2D" */
+window.Rede2D = function (raiz) {
+  if (!raiz || !window.d3 || typeof REDE === "undefined") return;
 
   /* ---------- tipos, cores e tamanhos ---------- */
   const TIPOS = {
@@ -304,4 +305,4 @@
   desenhar(); painel("minerva"); desenharTrilha();
   if (location.hash.startsWith("#rede-")) { const id = decodeURIComponent(location.hash.slice(6)); if (N.has(id)) setTimeout(() => selecionar(id), 300); }
   window.REDE_API = { selecionar, visaoGeral, estado: () => ({ selecionado, expandidos: [...expandidos], visiveis: [...vis] }) };
-})();
+};

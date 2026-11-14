@@ -3,73 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Equipe Aeroespacial — Minerva Aeroespacial</title>
-<meta name="description" content="Orientação, diretoria e setor administrativo da Minerva Aeroespacial, que atendem a Minerva Rockets e a Minerva Sats.">
-<meta property="og:title" content="Equipe Aeroespacial — Minerva Aeroespacial">
-<meta property="og:description" content="Orientação, diretoria e setor administrativo da Minerva Aeroespacial, que atendem a Minerva Rockets e a Minerva Sats.">
+<title>Ecossistema — Minerva Aeroespacial</title>
+<meta name="description" content="O ecossistema da Minerva Aeroespacial em 3D: orientação, diretoria, setor administrativo, equipes, subsistemas, projetos e pessoas conectados.">
+<meta property="og:title" content="Ecossistema — Minerva Aeroespacial">
+<meta property="og:description" content="O ecossistema da Minerva Aeroespacial em 3D: orientação, diretoria, setor administrativo, equipes, subsistemas, projetos e pessoas conectados.">
 <meta property="og:image" content="img/fotos/equipe-2026.webp">
 <meta name="theme-color" content="#07080c">
 <link rel="icon" href="img/logos/minerva-aeroespacial.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261113d">
-<link rel="stylesheet" href="css/aeroespacial-rede.css?v=20261114a">
+<link rel="stylesheet" href="style.css?v=20261114d">
+<link rel="stylesheet" href="css/aeroespacial-rede.css?v=20261114d">
 </head>
-<body data-page="aeroespacial">
+<body data-page="ecossistema">
 <header id="header"></header>
 <main>
 
 <section class="hero short">
-  <div class="bg" style="background-image:url('img/hemera/hemera-cutaway.webp');background-size:160%;background-position:60% 50%;filter:grayscale(.3)"></div>
+  <div class="bg" style="background-image:url('img/fotos/equipe-lasc-2026.webp');background-position:center 55%"></div>
   <div class="container">
-    <span class="eyebrow">Equipe Aeroespacial</span>
-    <h1>Quem conduz<br>a Minerva</h1>
-    <p class="lead">Orientação, diretoria e setor administrativo: a estrutura que atende a Minerva Rockets e a Minerva Sats. As subequipes técnicas estão nas páginas de cada equipe.</p>
-    <div class="btns" style="margin-top:22px"><a class="btn btn-ghost" href="#ecossistema">Explorar o ecossistema</a><a class="btn btn-red" href="rockets.html#subequipes">Subequipes Rockets</a><a class="btn btn-blue" href="sats.html#subequipes">Subequipes Sats</a></div>
+    <span class="eyebrow">Ecossistema</span>
+    <h1>Uma equipe,<br>muitas conexões</h1>
+    <p class="lead">Orientação, diretoria e setor administrativo sustentam a Minerva Rockets e a Minerva Sats, que dividem subsistemas, projetos e pessoas. Explore o ecossistema em 3D, andar por andar.</p>
+    <div class="btns" style="margin-top:22px"><a class="btn btn-ghost" href="#ecossistema">Explorar o ecossistema</a></div>
   </div>
 </section>
 
 <section class="sec rede-sec" id="ecossistema" style="scroll-margin-top:70px">
   <div class="container">
     <div class="rede-head">
-      <div><span class="eyebrow">Ecossistema</span><h2 style="margin:0">Como a Minerva se conecta</h2>
-        <p class="mut" style="margin:10px 0 0">A Minerva não é uma pirâmide: orientação, diretoria e setor administrativo sustentam as duas equipes técnicas, que dividem subsistemas, projetos e pessoas. Comece por qualquer ponto e siga as conexões.</p></div>
+      <div><span class="eyebrow">Ecossistema em 3D</span><h2 style="margin:0">Como a Minerva se conecta</h2>
+        <p class="mut" style="margin:10px 0 0">Cada andar é uma camada: por <b>nível</b> (da orientação e diretoria até os integrantes) ou por <b>ano</b> (do próximo projeto ao arquivo). Gire, aproxime e clique em qualquer ponto para seguir as conexões.</p></div>
     </div>
     <div id="rede"><p class="mut">Carregando a rede…</p></div>
-    <noscript><p class="mut">A rede interativa precisa de JavaScript. As listas de orientação, diretoria e setor administrativo estão logo abaixo.</p></noscript>
-  </div>
-</section>
-
-<section class="sec">
-  <div class="container">
-    <div class="reveal" style="margin-bottom:22px"><span class="eyebrow">Orientação</span><h2>Professores orientadores</h2></div>
-    <div class="people-grid" id="orientadores"></div>
-  </div>
-</section>
-
-<section class="sec alt">
-  <div class="container">
-    <div class="reveal" style="margin-bottom:22px"><span class="eyebrow">Diretoria</span><h2>Diretoria</h2></div>
-    <div id="diretoria"></div>
-  </div>
-</section>
-
-<section class="sec" id="administrativo" style="scroll-margin-top:70px">
-  <div class="container">
-    <div class="reveal" style="margin-bottom:22px"><span class="eyebrow">Setor administrativo</span><h2>Administrativo</h2>
-      <p class="mut">Operações, marketing, gestão e financeiro: quem mantém as duas equipes funcionando. Abra um cartão para ver quem está em cada área.</p></div>
-    <div id="adm-lideranca" style="margin-bottom:24px"></div>
-    <div class="bp-grid" id="subequipes-grid"></div>
+    <noscript><p class="mut">O ecossistema interativo precisa de JavaScript. A equipe por ciclo está na página <a href="equipe.html">Equipe</a>.</p></noscript>
   </div>
 </section>
 
 </main>
 <footer id="footer"></footer>
-<script src="dados.js?v=20261113d"></script>
-<script src="app.js?v=20261113d"></script>
+<script src="dados.js?v=20261114d"></script>
+<script src="app.js?v=20261114d"></script>
 <script src="js/d3.v7.9.0.min.js"></script><!-- D3.js 7.9.0, licença ISC (js/d3.LICENSE.txt) -->
-<script src="js/aeroespacial-rede-dados.js?v=20261114a"></script>
-<script src="js/aeroespacial-rede.js?v=20261114a"></script>
+<script src="js/aeroespacial-rede-dados.js?v=20261114d"></script>
+<script src="js/aeroespacial-rede.js?v=20261114d"></script>
+<script type="importmap">{ "imports": { "three": "./js/three/three.module.min.js" } }</script>
+<script type="module" src="js/ecossistema-3d.js?v=20261114d"></script><!-- three.js r169, licença MIT (js/three/LICENSE.txt) -->
 </body>
 </html>
