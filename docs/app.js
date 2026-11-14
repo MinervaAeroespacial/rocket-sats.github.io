@@ -177,6 +177,17 @@ function interacoes() {
   });
 }
 
+/* carrossel de vídeos: setas rolam uma "página" para o lado */
+function carrosseis() {
+  document.querySelectorAll(".vcar-btn").forEach(b => {
+    const el = $(b.dataset.car); if (!el) return;
+    const upd = () => document.querySelectorAll(`.vcar-btn[data-car="${b.dataset.car}"]`).forEach(x => {
+      x.disabled = x.dataset.dir === "-1" ? el.scrollLeft < 4 : el.scrollLeft + el.clientWidth >= el.scrollWidth - 4; });
+    b.onclick = () => el.scrollBy({ left: Number(b.dataset.dir) * el.clientWidth, behavior: "smooth" });
+    el.addEventListener("scroll", upd, { passive: true }); window.addEventListener("resize", upd); setTimeout(upd, 50);
+  });
+}
+
 /* ---------- páginas ---------- */
 function home() {
   const n = membrosAtuais().length;
@@ -197,6 +208,7 @@ function rockets() {
   $("conquistas").innerHTML = linhaDoTempo(CONQUISTAS.filter(c => c.equipe === "rockets"));
   $("doe").innerHTML = doacaoHTML();
   $("videos").innerHTML = videosHTML(VIDEOS.filter(v => /^(Lançamento|Teste|Lançamos)/.test(v.titulo)));
+  carrosseis();
 }
 
 function sats() {
