@@ -26,7 +26,6 @@ const SITE = {
     { rede: "Instagram", nome: "@minerva.aeroespacial", url: "https://www.instagram.com/minerva.aeroespacial/", seguidores: "4,7 mil seguidores", icone: "insta" },
     { rede: "YouTube", nome: "Minerva Rockets", url: "https://www.youtube.com/@MinervaRockets/featured", seguidores: "484 inscritos · 21 vídeos", icone: "yt" },
     { rede: "LinkedIn", nome: "Minerva Aeroespacial", url: "https://www.linkedin.com/company/minervaaeroespacial/posts/", seguidores: "Página do grupo", icone: "in" },
-    { rede: "LinkedIn", nome: "Minerva Rockets", url: "https://www.linkedin.com/company/minerva-rockets/posts/", seguidores: "Página da equipe de foguetes", icone: "in" },
     { rede: "Facebook", nome: "Minerva Rockets UFRJ", url: "https://www.facebook.com/minervarockets", seguidores: "4,2 mil seguidores", icone: "fb" },
   ],
   orientadores: [
