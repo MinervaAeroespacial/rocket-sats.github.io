@@ -75,7 +75,7 @@ function layout() {
   const atual = location.pathname.split("/").pop() || "index.html";
   const pag = atual === "post.html" ? "noticias.html" : atual;
   $("header").innerHTML = `<div class="container nav">
-    <a class="brand" href="index.html"><img src="img/logos/minerva-aeroespacial.webp" alt="" width="56" height="40"><span>Minerva</span></a>
+    <a class="brand" href="index.html"><img src="img/logos/minerva-aeroespacial.webp" alt="" width="56" height="40"><span>Minerva Aeroespacial</span></a>
     <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false">${ic("menu")}</button>
     <nav class="menu" id="menu">${NAV.map(([h, t, c]) => `<a class="${c} ${h === pag ? "on" : ""}" href="${h}">${t}</a>`).join("")}
       <a class="btn btn-red" href="parceiros.html#doe">${ic("heart")} Apoie</a></nav></div>`;

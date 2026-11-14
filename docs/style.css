@@ -53,7 +53,7 @@ p{margin:0 0 1em}
 .nav .btn{padding:9px 18px;margin-left:8px}
 .burger{display:none;margin-left:auto;background:none;border:0;color:#fff;padding:8px;cursor:pointer}
 .burger .svg{width:26px;height:26px}
-@media (max-width:1120px){
+@media (max-width:1240px){
   .burger{display:block}
   .menu{display:none;position:absolute;top:68px;left:0;right:0;flex-direction:column;align-items:stretch;background:var(--bg2);border-bottom:1px solid var(--line);padding:10px 20px 20px}
   .menu.open{display:flex}
@@ -64,7 +64,7 @@ p{margin:0 0 1em}
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:min(86vh,780px);display:flex;align-items:center;overflow:hidden;isolation:isolate}
 .hero .bg{position:absolute;inset:0;z-index:-2;background-size:cover;background-position:center}
-.hero .bg-video{width:100%;height:100%;object-fit:cover;object-position:center 40%;transform:scale(1.12)}
+.hero .bg-video{width:100%;height:100%;object-fit:cover;object-position:center 55%;transform:scale(1.12)}
 .hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(7,8,12,.95) 0%,rgba(7,8,12,.7) 50%,rgba(7,8,12,.35) 100%),linear-gradient(0deg,var(--bg) 0%,transparent 30%)}
 .hero .container{width:100%;padding-top:48px;padding-bottom:72px}
 .hero-logo{height:clamp(72px,9vw,104px);width:auto;margin-bottom:20px}
@@ -512,3 +512,7 @@ a.card:hover{border-color:#3a4157;transform:translateY(-3px)}
 @media (max-width:900px){.dec-fig.d3{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dec-3d{flex-direction:column;align-items:flex-start}.dec-mv{width:100%;height:150px}.dec-fig.d3 .dec-rot{max-width:none;text-align:left;flex-direction:row;gap:6px;font-size:.8rem}}
 .dec-mv{flex:0 0 auto}
 @media (max-width:900px){.dec-fig.d3{align-items:start}}
+/* brand-fit: nome completo "Minerva Aeroespacial" no cabeçalho */
+@media (max-width:1380px){.nav .brand{font-size:1.1rem;letter-spacing:.04em}}
+@media (max-width:480px){.nav .brand{font-size:.92rem;letter-spacing:.02em;gap:8px}.nav .brand img{height:32px}}
+@media (max-width:360px){.nav .brand{font-size:.8rem}}
