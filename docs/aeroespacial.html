@@ -13,7 +13,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261113d">
+<link rel="stylesheet" href="style.css?v=20261114b">
+<link rel="stylesheet" href="css/aeroespacial-rede.css?v=20261114a">
 </head>
 <body data-page="aeroespacial">
 <header id="header"></header>
@@ -25,7 +26,18 @@
     <span class="eyebrow">Equipe Aeroespacial</span>
     <h1>Quem conduz<br>a Minerva</h1>
     <p class="lead">Orientação, diretoria e setor administrativo: a estrutura que atende a Minerva Rockets e a Minerva Sats. As subequipes técnicas estão nas páginas de cada equipe.</p>
-    <div class="btns" style="margin-top:22px"><a class="btn btn-red" href="rockets.html#subequipes">Subequipes Rockets</a><a class="btn btn-blue" href="sats.html#subequipes">Subequipes Sats</a></div>
+    <div class="btns" style="margin-top:22px"><a class="btn btn-ghost" href="#ecossistema">Explorar o ecossistema</a><a class="btn btn-red" href="rockets.html#subequipes">Subequipes Rockets</a><a class="btn btn-blue" href="sats.html#subequipes">Subequipes Sats</a></div>
+  </div>
+</section>
+
+<section class="sec rede-sec" id="ecossistema" style="scroll-margin-top:70px">
+  <div class="container">
+    <div class="rede-head">
+      <div><span class="eyebrow">Ecossistema</span><h2 style="margin:0">Como a Minerva se conecta</h2>
+        <p class="mut" style="margin:10px 0 0">A Minerva não é uma pirâmide: orientação, diretoria e setor administrativo sustentam as duas equipes técnicas, que dividem subsistemas, projetos e pessoas. Comece por qualquer ponto e siga as conexões.</p></div>
+    </div>
+    <div id="rede"><p class="mut">Carregando a rede…</p></div>
+    <noscript><p class="mut">A rede interativa precisa de JavaScript. As listas de orientação, diretoria e setor administrativo estão logo abaixo.</p></noscript>
   </div>
 </section>
 
@@ -54,7 +66,10 @@
 
 </main>
 <footer id="footer"></footer>
-<script src="dados.js?v=20261113d"></script>
-<script src="app.js?v=20261113d"></script>
+<script src="dados.js?v=20261114b"></script>
+<script src="app.js?v=20261114b"></script>
+<script src="js/d3.v7.9.0.min.js"></script><!-- D3.js 7.9.0, licença ISC (js/d3.LICENSE.txt) -->
+<script src="js/aeroespacial-rede-dados.js?v=20261114a"></script>
+<script src="js/aeroespacial-rede.js?v=20261114a"></script>
 </body>
 </html>

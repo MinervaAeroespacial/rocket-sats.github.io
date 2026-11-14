@@ -208,7 +208,42 @@ function reel(lista, id = "reel") {
 }
 
 /* ---------- páginas ---------- */
+/* patch de missão em SVG para projetos sem patch oficial (o do Hemera v.1 é a arte real) */
+const PATCHES = { "hemera-v1": "img/hemera/patch-hemera-v1.webp" };
+function patchSVG(p) {
+  const sat = p.equipe === "sats", c1 = sat ? "#2b7be4" : "#e8312f", c2 = sat ? "#5aa0ff" : "#f2c14e";
+  const uid = "pt-" + p.id, ano = String(p.periodo || p.ano || "").replace("Próximos ciclos", "EM BREVE").toUpperCase();
+  let estr = ""; for (let i = 0; i < 22; i++) { const a = (i * 137.5) % 360, r = 18 + (i * 29) % 44; estr += `<circle cx="${100 + r * Math.cos(a * Math.PI / 180)}" cy="${86 + r * .8 * Math.sin(a * Math.PI / 180)}" r="${i % 4 ? .8 : 1.4}" fill="#fff" opacity="${.5 + (i % 3) * .2}"/>`; }
+  const veiculo = sat
+    ? `<g transform="translate(100 88) rotate(-18)"><rect x="-13" y="-13" width="26" height="26" rx="2" fill="#dfe5ee" stroke="#8a93a6"/><rect x="-9" y="-9" width="18" height="18" fill="#1a2233"/><circle r="3" fill="${c2}"/><rect x="-46" y="-6" width="30" height="12" fill="#1d3f7a" stroke="#5aa0ff" stroke-width=".8"/><rect x="16" y="-6" width="30" height="12" fill="#1d3f7a" stroke="#5aa0ff" stroke-width=".8"/></g>`
+    : `<g transform="translate(100 92) rotate(35)"><path d="M0 -44 C7 -32 8 -18 8 -6 L8 26 L-8 26 L-8 -6 C-8 -18 -7 -32 0 -44Z" fill="#eef1f6"/><path d="M-8 14 L-17 30 L-8 26Z M8 14 L17 30 L8 26Z" fill="${c1}"/><path d="M-6 26 Q0 58 6 26Z" fill="#ffb24a"/><path d="M-3 26 Q0 44 3 26Z" fill="#fff3c4"/></g><path d="M58 150 Q100 118 142 150" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="1.2" stroke-dasharray="2 3"/>`;
+  return `<svg viewBox="0 0 200 200" aria-hidden="true"><defs><clipPath id="${uid}c"><circle cx="100" cy="100" r="76"/></clipPath>
+    <linearGradient id="${uid}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1330"/><stop offset=".7" stop-color="#16285c"/><stop offset="1" stop-color="${sat ? "#1d4f9a" : "#7a2a1c"}"/></linearGradient>
+    <path id="${uid}t" d="M 32 100 A 68 68 0 0 1 168 100"/><path id="${uid}b" d="M 26 100 A 74 74 0 0 0 174 100"/></defs>
+    <circle cx="100" cy="100" r="96" fill="#0d1018" stroke="${c2}" stroke-width="3"/><circle cx="100" cy="100" r="88" fill="none" stroke="${c1}" stroke-width="10"/>
+    <g clip-path="url(#${uid}c)"><rect width="200" height="200" fill="url(#${uid}g)"/>${estr}<ellipse cx="100" cy="196" rx="110" ry="48" fill="${sat ? "#1f6fd1" : "#1f6f4a"}"/><ellipse cx="100" cy="200" rx="110" ry="44" fill="${sat ? "#2b7be4" : "#2c8f5a"}" opacity=".7"/>${veiculo}</g>
+    <circle cx="100" cy="100" r="76" fill="none" stroke="#fff" stroke-opacity=".35"/>
+    <text font-family="Saira Condensed, Inter, sans-serif" font-weight="700" font-size="15" letter-spacing="2" fill="#fff"><textPath href="#${uid}t" startOffset="50%" text-anchor="middle">${esc(p.nome.toUpperCase().split(" (")[0])}</textPath></text>
+    <text font-family="Saira Condensed, Inter, sans-serif" font-weight="600" font-size="10" letter-spacing="2" fill="${c2}"><textPath href="#${uid}b" startOffset="50%" text-anchor="middle">${sat ? "MINERVA SATS" : "MINERVA ROCKETS"} · ${esc(ano)}</textPath></text></svg>`;
+}
+function carrosselProjetos() {
+  const el = $("pcar"); if (!el) return;
+  const breve = p => /futuro|próximos/i.test(p.status + " " + p.periodo);
+  const resumo = t => { const f = (t || "").split(/(?<=\.)\s/)[0]; return f.length > 170 ? f.slice(0, 167).replace(/\s\S*$/, "") + "…" : f; };
+  el.innerHTML = PROJETOS.map(p => `<article class="pcard ${p.equipe}">
+      <div class="patch">${PATCHES[p.id] ? `<img src="${PATCHES[p.id]}" alt="Patch da missão ${esc(p.nome)}" loading="lazy">` : patchSVG(p)}</div>
+      <hr><h3>${esc(p.nome)}</h3><div class="pc-meta">${p.equipe === "sats" ? "Minerva Sats" : "Minerva Rockets"} · ${esc(p.periodo)}</div>
+      <p>${esc(resumo(p.resumo))}</p>
+      ${breve(p) ? `<span class="pc-link breve">Em breve</span>` : `<a class="pc-link" href="projetos.html#${esc(p.id)}">Saiba mais</a>`}</article>`).join("");
+  const setas = document.querySelectorAll("[data-pcar]");
+  const upd = () => { setas.forEach(b => b.disabled = b.dataset.pcar === "-1" ? el.scrollLeft < 4 : el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
+    el.classList.toggle("fim", el.scrollLeft + el.clientWidth >= el.scrollWidth - 4); };
+  setas.forEach(b => b.onclick = () => el.scrollBy({ left: Number(b.dataset.pcar) * (el.clientWidth - 40), behavior: "smooth" }));
+  el.addEventListener("scroll", upd, { passive: true }); window.addEventListener("resize", upd); setTimeout(upd, 60);
+}
+
 function home() {
+  carrosselProjetos();
   const n = membrosAtuais().length;
   $("stats").innerHTML = [[SITE.fundacao, "Ano de fundação"], [n, `Membros no ciclo ${CICLOS[0].nome}`], ["40+", "Cursos representados"], [PROJETOS.length, "Projetos no portfólio"]]
     .map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
