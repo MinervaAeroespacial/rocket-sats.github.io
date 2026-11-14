@@ -1,0 +1,76 @@
+/* Rede da Minerva Aeroespacial — estilos exclusivos de aeroespacial.html */
+.rede-sec{--c-centro:#f4f1ea;--c-orient:#b58cff;--c-dir:#f2c14e;--c-adm:#3ecf8e;--c-r:#e8312f;--c-b:#2b7be4;--c-proj:#ff8a3d;--c-conq:#ffd166;--c-sub:#33d1e0;--c-pessoa:#9d7bff;--c-curso:#5aa0ff}
+.rede-head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:22px}
+.rede-head p{max-width:720px}
+.rede-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.rede-busca{position:relative;flex:1 1 260px;max-width:380px}
+.rede-busca input{width:100%;padding:11px 14px 11px 38px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:#fff;font:inherit;font-size:.92rem}
+.rede-busca input:focus{outline:2px solid var(--blue);outline-offset:1px}
+.rede-busca svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:#8a93a6;fill:none;stroke-width:2}
+.rede-sug{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;background:#10141d;border:1px solid var(--line);border-radius:12px;max-height:280px;overflow:auto;display:none;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.rede-sug.on{display:block}
+.rede-sug button{display:flex;gap:10px;align-items:center;width:100%;padding:9px 14px;border:0;background:none;color:#e8ebf0;text-align:left;font:inherit;font-size:.9rem;cursor:pointer}
+.rede-sug button:hover,.rede-sug button.sel{background:rgba(255,255,255,.06)}
+.rede-sug small{margin-left:auto;color:#8a93a6;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
+.rede-btn{padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:#e8ebf0;font:inherit;font-size:.85rem;cursor:pointer}
+.rede-btn:hover{background:rgba(255,255,255,.07)}
+.rede-filtros{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.rede-filtro{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:#c9cfdb;font:inherit;font-size:.82rem;cursor:pointer}
+.rede-filtro i{width:10px;height:10px;border-radius:50%;background:var(--k);box-shadow:0 0 8px var(--k)}
+.rede-filtro[aria-pressed="false"]{opacity:.42;text-decoration:line-through}
+.rede-box{display:grid;grid-template-columns:minmax(0,1fr) 360px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:radial-gradient(900px 500px at 30% 30%,rgba(43,123,228,.10),transparent 60%),radial-gradient(700px 400px at 80% 90%,rgba(232,49,47,.08),transparent 60%),#080a10}
+.rede-stage{position:relative;height:clamp(520px,72vh,760px);touch-action:none}
+.rede-stage svg{width:100%;height:100%;display:block;cursor:grab}
+.rede-stage svg:active{cursor:grabbing}
+.rede-trilha{position:absolute;left:14px;top:12px;right:14px;display:flex;flex-wrap:wrap;gap:6px;pointer-events:none}
+.rede-trilha button{pointer-events:auto;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(10,12,18,.8);color:#c9cfdb;font:inherit;font-size:.74rem;cursor:pointer}
+.rede-trilha button:last-child{color:#fff;border-color:rgba(255,255,255,.35)}
+.rede-dica{position:absolute;left:14px;bottom:12px;color:#8a93a6;font-size:.76rem;pointer-events:none}
+.rede-zoom{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:6px}
+.rede-zoom button{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:rgba(12,15,22,.9);color:#fff;font-size:1.1rem;cursor:pointer}
+/* nós e ligações */
+.rd-link{stroke:rgba(180,190,215,.16);stroke-width:1;transition:stroke .3s,stroke-opacity .3s}
+.rd-link.hl{stroke:rgba(255,255,255,.55);stroke-width:1.4}
+.rd-link.dim{stroke-opacity:.35}
+.rd-node{cursor:pointer;transition:opacity .3s}
+.rd-node circle.core{stroke:#0a0c12;stroke-width:1.5;filter:drop-shadow(0 0 6px var(--k))}
+.rd-node circle.ring{fill:none;stroke:var(--k);stroke-width:1.5;opacity:.0;transition:opacity .3s}
+.rd-node.exp circle.ring{opacity:.55;stroke-dasharray:3 3}
+.rd-node.sel circle.ring{opacity:1;stroke-dasharray:none;stroke-width:2.5}
+.rd-node.dim{opacity:.22}
+.rd-node.dim.mid text,.rd-node.dim.small text{opacity:0}
+.rd-node text{fill:#e8ebf0;font-family:var(--f-body);font-size:11px;paint-order:stroke;stroke:#07080c;stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+.rd-node.big text{font-family:var(--f-head);font-size:15px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.rd-node.mid text{font-size:12px;font-weight:600}
+.rd-node.small text{opacity:0;transition:opacity .25s}
+.rd-node.small.show text,.rd-node.small:hover text{opacity:1}
+.rd-node .plus{fill:#07080c;font-size:11px;font-weight:700;stroke:none;font-family:var(--f-body)}
+.rd-node:focus{outline:none}.rd-node:focus-visible circle.ring{opacity:1;stroke:#fff}
+/* painel */
+.rede-painel{border-left:1px solid var(--line);background:rgba(13,16,24,.92);padding:22px 22px 26px;overflow:auto;height:clamp(520px,72vh,760px)}
+.rp-tipo{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#aab2c2}
+.rp-tipo i{width:9px;height:9px;border-radius:50%;background:var(--k)}
+.rede-painel h3{margin:8px 0 4px;font-size:1.5rem;line-height:1.1;text-transform:uppercase}
+.rp-sub{color:#aab2c2;font-size:.9rem;margin:0 0 12px}
+.rp-img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;border:1px solid var(--line);margin:6px 0 12px}
+.rede-painel p.rp-desc{font-size:.9rem;line-height:1.55;color:#c9cfdb;margin:0 0 14px}
+.rp-campos{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:.84rem;margin:0 0 16px}
+.rp-campos dt{color:#8a93a6}.rp-campos dd{margin:0;color:#e8ebf0}
+.rp-campos dd.na{color:#6b7385;font-style:italic}
+.rp-grupo{margin-top:14px}
+.rp-grupo h4{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:#8a93a6;margin:0 0 8px;display:flex;gap:8px;align-items:center}
+.rp-grupo h4 span{color:#5d6577}
+.rp-chips{display:flex;flex-wrap:wrap;gap:6px}
+.rp-chips button{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#e8ebf0;font:inherit;font-size:.8rem;cursor:pointer;text-align:left}
+.rp-chips button:hover{border-color:var(--k);background:rgba(255,255,255,.07)}
+.rp-chips button i{flex:none;width:7px;height:7px;border-radius:50%;background:var(--k)}
+.rp-chips button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rp-chips button em{font-style:normal;color:#8a93a6;font-size:.72rem}
+.rp-acoes{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.rede-nota{margin-top:14px;color:#8a93a6;font-size:.8rem}
+@media (max-width:960px){
+  .rede-box{grid-template-columns:1fr}
+  .rede-stage{height:62vh;min-height:420px}
+  .rede-painel{height:auto;max-height:none;border-left:0;border-top:1px solid var(--line)}
+}
+@media (prefers-reduced-motion:reduce){.rd-link,.rd-node,.rd-node circle.ring{transition:none}}
